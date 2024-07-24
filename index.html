@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sitio web con formulario de contacto</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      margin: 0;
+      padding: 20px;
+    }
+
+    h1 {
+      text-align: center;
+    }
+
+    form {
+      margin-top: 20px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    textarea {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 10px;
+      border: 1px solid #ccc;
+      box-sizing: border-box;
+    }
+
+    button[type="submit"],
+    button[type="button"] {
+      background-color: #4CAF50;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      cursor: pointer;
+    }
+
+    #download-link {
+      display: none;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Formulario de Contacto</h1>
+
+  <form id="contact-form">
+    <label for="name">Nombre:</label>
+    <input type="text" id="name" name="name" required>
+
+    <label for="email">Correo electrónico:</label>
+    <input type="email" id="email" name="email" required>
+
+    <label for="message">Mensaje:</label>
+    <textarea id="message" name="message" rows="5" required></textarea>
+
+    <button type="submit">Enviar</button>
+    <button type="button" id="download-button">Descargar formulario</button>
+  </form>
+
+  <a href="#" id="download-link" download="datos-contacto.pdf">Descargar datos en PDF</a>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+  <script>
+    const contactForm = document.getElementById('contact-form');
+    const downloadLink = document.getElementById('download-link');
+    const downloadButton = document.getElementById('download-button');
+
+    downloadButton.addEventListener('click', () => {
+      const name = document.getElementById('name').value;
+      const email = document.getElementById('email').value;
+      const message = document.getElementById('message').value;
+
+      // Crear un nuevo documento PDF con jsPDF
+      const doc = new jsPDF();
+
+      // Agregar contenido al PDF
+      doc.setFontSize(16);
+      doc.text('Formulario de Contacto', 10, 10);
+      doc.text(`Nombre: ${name}`, 10, 25);
+      doc.text(`Correo electrónico: ${email}`, 10, 40);
+      doc.text(`Mensaje: ${message}`, 10, 55);
+
+      // Guardar el PDF
+      doc.save('datos-contacto.pdf');
+    });
+  </script>
+</body>
+</html>
