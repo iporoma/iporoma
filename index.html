@@ -394,6 +394,15 @@ footer {
   }
 }
 
+@media (max-width: 768px) {
+  .carousel-nav-buttons {
+    display: none;           /* opción 1: ocultarlos en mobile */
+    /* o */
+    top: auto;
+    bottom: 10px;             /* opción 2: moverlos abajo, fuera de las miniaturas */
+  }
+}
+ 
     footer {
         padding: 25px 6vw;
         display: block
