@@ -1,12 +1,582 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Mi página</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#0e0e0e">
+<meta name="description" content="Mi primera presentación — estudio de fotografía. Un primer carrete revelado en público.">
+<title>Mi primera presentación — estudio de fotografía</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:ital,wght@0,300..700;1,300..700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#fafafa; --ink:#0e0e0e; --muted:#8a8a8a;
+  --accent:#2b4af0; --accent-l:#8b9bff;
+  --line:rgba(14,14,14,.14); --line-l:rgba(250,250,250,.15);
+  --grot:'Inter Tight',ui-sans-serif,sans-serif;
+  --serif:'Instrument Serif',Georgia,serif;
+  --e:cubic-bezier(.22,.8,.24,1);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  background:var(--bg); color:var(--ink);
+  font-family:var(--grot); font-weight:350; line-height:1.6;
+  overflow-x:clip; -webkit-font-smoothing:antialiased;
+}
+::selection{background:var(--accent);color:#fff}
+img{display:block;max-width:100%}
+a{color:inherit;text-decoration:none}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+section,footer{scroll-margin-top:70px}
+html.fine body *{cursor:none}
+
+/* ---------- progreso ---------- */
+#progress{position:fixed;top:0;left:0;height:2px;width:100%;background:var(--accent);
+  transform:scaleX(0);transform-origin:0 0;z-index:130}
+
+/* ---------- cursor ---------- */
+#cursor{position:fixed;inset:0;z-index:200;pointer-events:none;opacity:0;transition:opacity .3s}
+#cursor.vis{opacity:1}
+.c-dot{position:fixed;top:0;left:0;width:6px;height:6px;margin:-3px 0 0 -3px;border-radius:50%;background:var(--accent)}
+.c-ring{position:fixed;top:0;left:0;width:38px;height:38px;margin:-19px 0 0 -19px;border-radius:50%;
+  border:1px solid rgba(255,255,255,.8);mix-blend-mode:difference;display:flex;align-items:center;justify-content:center;
+  transition:width .25s var(--e),height .25s var(--e),margin .25s var(--e)}
+.c-ring.on{width:76px;height:76px;margin:-38px 0 0 -38px}
+.c-label{font:500 9px var(--grot);letter-spacing:.16em;text-transform:uppercase;color:#fff;opacity:0;transition:opacity .2s}
+.c-ring.on .c-label{opacity:1}
+html:not(.fine) #cursor{display:none}
+
+/* ---------- cabecera ---------- */
+.site-head{position:fixed;top:0;left:0;right:0;z-index:120;display:flex;align-items:baseline;gap:2rem;
+  padding:20px 4vw;mix-blend-mode:difference;color:#fff}
+.brand{font:500 1rem var(--grot);letter-spacing:-.01em}
+.brand span{font:400 .7rem var(--grot);letter-spacing:.2em;text-transform:uppercase;opacity:.65;margin-left:.6rem}
+.site-head nav{margin-left:auto;display:flex;gap:1.8rem}
+.site-head nav a{font:400 10.5px var(--grot);letter-spacing:.2em;text-transform:uppercase;opacity:.7;transition:opacity .25s}
+.site-head nav a:hover{opacity:1}
+.head-clock{font:400 10.5px var(--grot);letter-spacing:.18em;opacity:.7;font-variant-numeric:tabular-nums}
+
+/* ---------- HERO ---------- */
+.hero{position:relative;height:100svh;min-height:560px;overflow:hidden;background:#0e0e0e;color:#fafafa;
+  user-select:none;-webkit-user-select:none}
+.hero-media{position:absolute;left:0;right:0;top:0;height:135%;will-change:transform}
+.hero-media img{width:100%;height:100%;object-fit:cover;
+  transform:scale(1.08);transition:transform 2.8s var(--e)}
+body.loaded .hero-media img{transform:scale(1.02)}
+.hero::before{content:"";position:absolute;inset:0;z-index:1;
+  background:linear-gradient(to top, rgba(0,0,0,.72), rgba(0,0,0,.16) 42%, rgba(0,0,0,.04) 68%, rgba(0,0,0,.32))}
+.hero-ui{position:relative;z-index:2;height:100%;display:flex;flex-direction:column;justify-content:flex-end;
+  padding:0 5vw 16vh;pointer-events:none}
+.hero-kicker{font:400 10.5px var(--grot);letter-spacing:.26em;text-transform:uppercase;color:rgba(250,250,250,.8);
+  display:flex;align-items:center;gap:14px;opacity:0;transition:opacity 1s var(--e) .5s}
+.hero-kicker::before{content:"";width:38px;height:1px;background:var(--accent-l)}
+.hero-title{font:300 clamp(3rem,10vw,8.5rem)/1.02 var(--grot);letter-spacing:-.035em;margin-top:1.4rem}
+.hero-title .line{display:block;overflow:hidden}
+.hero-title .line>span{display:inline-block;transform:translateY(115%);transition:transform 1s var(--e)}
+.hero-title .line:nth-child(2)>span{transition-delay:.12s}
+.hero-title em{font:italic 400 .98em var(--serif);letter-spacing:0;color:var(--accent-l)}
+.hero-sub{max-width:54ch;margin-top:1.6rem;font-size:clamp(.9rem,1.3vw,1.05rem);font-weight:350;
+  color:rgba(250,250,250,.85);opacity:0;transition:opacity 1s var(--e) .65s}
+body.loaded .hero-kicker,body.loaded .hero-sub{opacity:1}
+body.loaded .hero-title .line>span{transform:none}
+.vf{position:absolute;width:20px;height:20px;border:0 solid rgba(250,250,250,.6);z-index:2;pointer-events:none}
+.vf.tl{top:76px;left:16px;border-top-width:1.5px;border-left-width:1.5px}
+.vf.tr{top:76px;right:16px;border-top-width:1.5px;border-right-width:1.5px}
+.vf.bl{bottom:16px;left:16px;border-bottom-width:1.5px;border-left-width:1.5px}
+.vf.br{bottom:16px;right:16px;border-bottom-width:1.5px;border-right-width:1.5px}
+.exif-l,.exif-r{position:absolute;bottom:26px;z-index:2;font:400 9.5px var(--grot);letter-spacing:.22em;
+  text-transform:uppercase;color:rgba(250,250,250,.55);pointer-events:none}
+.exif-l{left:5vw}.exif-r{right:5vw}
+.scroll-cue{position:absolute;bottom:22px;left:50%;transform:translateX(-50%);z-index:2;
+  display:flex;flex-direction:column;align-items:center;gap:8px;
+  font:400 9px var(--grot);letter-spacing:.3em;text-transform:uppercase;color:rgba(250,250,250,.65);pointer-events:none}
+.scroll-cue i{position:relative;display:block;width:1px;height:34px;background:rgba(250,250,250,.25);overflow:hidden}
+.scroll-cue i::after{content:"";position:absolute;left:0;top:-40%;width:100%;height:40%;background:var(--accent-l);
+  animation:drop 1.8s var(--e) infinite}
+@keyframes drop{to{top:110%}}
+
+/* ---------- marquee ---------- */
+.marquee{border-top:1px solid var(--line);border-bottom:1px solid var(--line);overflow:hidden;padding:16px 0;background:var(--bg)}
+.mq-track{display:flex;width:max-content;animation:mq 44s linear infinite}
+.mq-g{display:flex;align-items:center;gap:3rem;padding-right:3rem;white-space:nowrap}
+.mq-g span{font:italic 400 1.5rem var(--serif)}
+.ast{width:14px;height:14px;color:var(--accent);animation:spin 12s linear infinite;flex:none}
+@keyframes mq{to{transform:translateX(-50%)}}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ---------- secciones ---------- */
+main{padding:0 5vw}
+.sec{padding:8.5rem 0 2rem}
+.sec-head{display:flex;align-items:baseline;gap:1.6rem;margin-bottom:4.5rem}
+.sec-n{font:500 12px var(--grot);letter-spacing:.16em;color:var(--accent)}
+.sec-head h2{font:300 clamp(2.4rem,5.4vw,4.6rem)/1 var(--grot);letter-spacing:-.03em}
+.sec-line{flex:1;height:1px;background:var(--line);align-self:center}
+.sec-tag{font:400 10px var(--grot);letter-spacing:.22em;text-transform:uppercase;color:var(--muted)}
+
+/* génesis */
+.gen{position:relative}
+.ghost{position:absolute;top:-6rem;right:-3vw;font:600 24vw/1 var(--grot);color:transparent;
+  -webkit-text-stroke:1px rgba(14,14,14,.07);pointer-events:none;z-index:0;user-select:none}
+.gen-grid{position:relative;z-index:1;display:grid;grid-template-columns:minmax(0,7fr) minmax(0,3fr);gap:6vw}
+.gen-big{font:300 clamp(1.55rem,3vw,2.8rem)/1.32 var(--grot);letter-spacing:-.02em;max-width:22em}
+.gen-big em{font:italic 400 1em var(--serif);color:var(--accent)}
+.gen-note{display:block;margin-top:2.2rem;font:400 11px var(--grot);letter-spacing:.2em;text-transform:uppercase;color:var(--muted)}
+.meta{border-top:1px solid var(--line)}
+.meta div{display:grid;grid-template-columns:88px 1fr;gap:1rem;padding:12px 0;border-bottom:1px solid var(--line)}
+.meta dt{font:500 9.5px var(--grot);letter-spacing:.2em;text-transform:uppercase;color:var(--muted);padding-top:3px}
+.meta dd{font-size:.86rem}
+.gen-photo{margin-top:2.4rem}
+.gen-photo .ph-frame{aspect-ratio:3/4}
+.gen-photo figcaption{margin-top:10px;font:400 10px var(--grot);letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+
+/* galería: primer rollo */
+.roll{display:grid;grid-template-columns:repeat(12,1fr);gap:4.5rem 2.4rem;align-items:start}
+.ph{position:relative}
+.f1{grid-column:1/8} .f2{grid-column:9/13;margin-top:16vh}
+.f3{grid-column:2/6;margin-top:9vh} .f4{grid-column:7/13;margin-top:17vh}
+.f5{grid-column:1/6;margin-top:7vh}  .f6{grid-column:6/13;margin-top:16vh}
+.f1 .ph-frame{aspect-ratio:4/3}.f2 .ph-frame{aspect-ratio:3/4}.f3 .ph-frame{aspect-ratio:1/1}
+.f4 .ph-frame{aspect-ratio:3/2}.f5 .ph-frame{aspect-ratio:5/4}.f6 .ph-frame{aspect-ratio:16/9}
+.ph-frame{overflow:hidden;background:#ececea}
+.ph-frame img{width:100%;height:100%;object-fit:cover;transition:transform 1.1s var(--e)}
+.ph:hover .ph-frame img{transform:scale(1.045)}
+.ph figcaption{display:flex;gap:14px;align-items:baseline;border-top:1px solid var(--line);margin-top:14px;padding-top:10px}
+.ph-n{font:500 11px var(--grot);letter-spacing:.14em;color:var(--accent)}
+.ph-t{font:400 .95rem var(--grot)}
+.ph-x{margin-left:auto;font:400 9.5px var(--grot);letter-spacing:.1em;color:var(--muted);text-align:right}
+.roll-quote{grid-column:3/11;padding:2rem 0 1rem}
+.roll-quote p{font:italic 400 clamp(1.5rem,2.8vw,2.4rem)/1.4 var(--serif)}
+.roll-quote cite{display:block;margin-top:1.2rem;font:400 10px var(--grot);letter-spacing:.2em;text-transform:uppercase;color:var(--muted);font-style:normal}
+.roll-end{grid-column:1/13;display:flex;gap:14px;align-items:baseline;border-top:1px solid var(--line);padding-top:1.2rem}
+.roll-end b{font:500 11px var(--grot);letter-spacing:.14em;color:var(--accent)}
+.roll-end span{font-size:.9rem;color:var(--muted)}
+
+/* hoja de contactos */
+.strip-zone{margin:0 calc(50% - 50vw);background:#0e0e0e;padding:26px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.strip{overflow:hidden;touch-action:pan-y}
+html.fine .strip{cursor:none}
+.strip-track{display:flex;gap:10px;width:max-content;padding:0 4vw;will-change:transform}
+.frame{width:158px;flex:none;background:#0a0a0a;padding:0 0 6px}
+.perf{display:flex;justify-content:space-between;align-items:center;height:15px;padding:0 10px}
+.perf span{width:9px;height:5px;border-radius:1px;background:rgba(250,250,250,.22)}
+.f-img{position:relative;height:100px;overflow:hidden;background:#161616}
+.f-img img{width:100%;height:100%;object-fit:cover}
+.rej .f-img::after{content:"";position:absolute;inset:0;background:rgba(139,155,255,.08)}
+.rej-x{position:absolute;inset:0;display:flex;align-items:center;justify-content:center}
+.rej-x svg{width:36px;height:36px;stroke:var(--accent-l);stroke-width:2;fill:none}
+.f-tag{font:400 9px var(--grot);letter-spacing:.22em;color:rgba(250,250,250,.5);padding:7px 10px 0}
+.strip-hint{display:flex;justify-content:center;gap:12px;align-items:center;margin-top:1.6rem;
+  font:400 10px var(--grot);letter-spacing:.24em;text-transform:uppercase;color:var(--muted)}
+.strip-hint svg{width:14px;height:14px;stroke:var(--accent);fill:none;stroke-width:1.6}
+
+/* cuarto oscuro */
+.dark{background:var(--ink);color:#fafafa;margin:0 -5vw;padding:8.5rem 5vw 7rem}
+.dark .sec-line{background:var(--line-l)}
+.dark .sec-tag{color:rgba(250,250,250,.5)}
+.dark .sec-n{color:var(--accent-l)}
+.viewer{max-width:960px;margin:0 auto}
+.v-stage{position:relative;aspect-ratio:3/2;background:#0a0a0a;border:1px solid var(--line-l);overflow:hidden;touch-action:pan-y}
+.v-slide{position:absolute;inset:0;opacity:0;transform:scale(1.035);transition:opacity .6s var(--e),transform 1s var(--e);pointer-events:none}
+.v-slide.on{opacity:1;transform:none;pointer-events:auto}
+.v-slide img{width:100%;height:100%;object-fit:cover;filter:grayscale(1) contrast(1.08)}
+.v-btn{position:absolute;top:50%;transform:translateY(-50%);z-index:3;width:54px;height:54px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;background:rgba(14,14,14,.4);border:1px solid rgba(250,250,250,.35);
+  color:#fafafa;transition:background .3s,border-color .3s}
+.v-btn:hover{background:var(--accent);border-color:var(--accent)}
+.v-btn svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:1.5}
+#vPrev{left:18px} #vNext{right:18px}
+.v-bar{display:flex;justify-content:space-between;align-items:flex-end;gap:2rem;margin-top:1.6rem}
+.v-cap{min-height:3.6rem}
+.v-cap.swap{animation:capIn .5s var(--e)}
+@keyframes capIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.v-title{display:block;font:italic 400 clamp(1.25rem,2.2vw,1.75rem)/1.25 var(--serif)}
+.v-exif{display:block;margin-top:6px;font:400 10px var(--grot);letter-spacing:.18em;text-transform:uppercase;color:rgba(250,250,250,.55)}
+.v-cnt{font:300 2.2rem/1 var(--grot);font-variant-numeric:tabular-nums}
+.v-cnt span{font-size:1.1rem;color:rgba(250,250,250,.45)}
+.v-prog{height:1px;background:var(--line-l);margin-top:1.4rem;overflow:hidden}
+#vFill{height:100%;background:var(--accent-l);transform:scaleX(.2);transform-origin:0 0;transition:transform .5s var(--e)}
+.v-key{margin-top:1.1rem;font:400 9.5px var(--grot);letter-spacing:.22em;text-transform:uppercase;color:rgba(250,250,250,.4);text-align:right}
+
+/* footer */
+footer{padding:8.5rem 5vw 2rem;position:relative}
+.f-lead{max-width:44ch;font:300 clamp(1.15rem,1.9vw,1.5rem)/1.5 var(--grot)}
+.mail{display:inline-flex;align-items:center;gap:.25em;margin-top:2.6rem;
+  font:300 clamp(1.7rem,5.4vw,4.8rem)/1.1 var(--grot);letter-spacing:-.03em;word-break:break-all;
+  background-image:linear-gradient(var(--accent),var(--accent));background-size:0% 2px;background-repeat:no-repeat;
+  background-position:left 92%;transition:background-size .55s var(--e)}
+.mail:hover{background-size:100% 2px}
+.mail svg{width:.55em;height:.55em;stroke:var(--accent);fill:none;stroke-width:2;flex:none;transition:transform .4s var(--e)}
+.mail:hover svg{transform:translate(6px,-6px)}
+.f-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:2.5rem;margin-top:6rem;padding-top:2rem;border-top:1px solid var(--line);
+  font-size:.85rem;color:var(--muted)}
+.f-grid b{display:block;font:500 9.5px var(--grot);letter-spacing:.22em;text-transform:uppercase;color:var(--ink);margin-bottom:.5rem}
+.f-grid a{border-bottom:1px solid var(--line);transition:color .25s,border-color .25s}
+.f-grid a:hover{color:var(--accent);border-color:var(--accent)}
+.clock{font-variant-numeric:tabular-nums;color:var(--ink)}
+.f-bottom{display:flex;justify-content:space-between;gap:1.5rem;flex-wrap:wrap;margin-top:4rem;padding-top:1.2rem;border-top:1px solid var(--line);
+  font:400 10px var(--grot);letter-spacing:.18em;text-transform:uppercase;color:var(--muted)}
+
+/* reveals */
+.rv{opacity:0;transform:translateY(28px);transition:opacity .9s var(--e),transform .9s var(--e);transition-delay:var(--d,0s)}
+.rv.in{opacity:1;transform:none}
+.rv-img{clip-path:inset(0 0 101% 0);transition:clip-path 1.1s var(--e);transition-delay:var(--d,0s)}
+.rv-img .ph-frame img,.rv-img>img{transform:scale(1.12);transition:transform 1.5s var(--e)}
+.rv-img.in{clip-path:inset(0 0 0% 0)}
+.rv-img.in .ph-frame img,.rv-img.in>img{transform:scale(1)}
+.rv-img.in .ph:hover img{transform:scale(1.045)}
+
+/* responsive */
+@media(max-width:920px){
+  .site-head nav{display:none}
+  .gen-grid{grid-template-columns:1fr;gap:3.5rem}
+  .roll{display:block}
+  .roll>*{margin:0 0 3.6rem}
+  .roll-quote{padding:0}
+  .f-grid{grid-template-columns:1fr 1fr}
+  .exif-l,.exif-r{display:none}
+}
+@media(max-width:640px){
+  .sec{padding:6rem 0 1.5rem}
+  .sec-tag{display:none}
+  .f-grid{grid-template-columns:1fr}
+  .v-btn{width:44px;height:44px}
+}
+@media(prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  .mq-track,.ast,.scroll-cue i::after{animation:none}
+  .rv,.rv-img{transition:none;opacity:1;transform:none;clip-path:none}
+  .rv-img .ph-frame img,.rv-img>img{transform:none}
+  .hero-media img{transform:none;transition:none}
+}
+</style>
 </head>
 <body>
-  <h1>Bienvenido a mi página</h1>
-  <p>Este sitio está alojado en GitHub Pages.</p>
+
+<div id="progress" aria-hidden="true"></div>
+
+<div id="cursor" aria-hidden="true">
+  <div class="c-dot"></div>
+  <div class="c-ring"><span class="c-label"></span></div>
+</div>
+
+<header class="site-head">
+  <a class="brand" href="#hero">Mi primera presentación<span>estudio</span></a>
+  <nav>
+    <a href="#genesis">Génesis</a>
+    <a href="#rollo">Primer rollo</a>
+    <a href="#contactos">Contactos</a>
+    <a href="#oscuro">Cuarto oscuro</a>
+    <a href="#correo">Correo</a>
+  </nav>
+  <div class="head-clock"><span class="clock">--:--:--</span></div>
+</header>
+
+<!-- ============ HERO ============ -->
+<section class="hero" id="hero">
+  <div class="hero-media" id="heroMedia">
+    <img id="heroImg" src="https://picsum.photos/seed/mpp-cordillera/1920/1200.jpg"
+         alt="Cordillera al amanecer — fotografía que encabeza la web" fetchpriority="high">
+  </div>
+
+  <span class="vf tl" aria-hidden="true"></span><span class="vf tr" aria-hidden="true"></span>
+  <span class="vf bl" aria-hidden="true"></span><span class="vf br" aria-hidden="true"></span>
+
+  <div class="hero-ui">
+    <p class="hero-kicker">Estudio de fotografía · cuaderno nº 001</p>
+    <h1 class="hero-title">
+      <span class="line"><span>Mi primera</span></span>
+      <span class="line"><span><em>presentación</em></span></span>
+    </h1>
+    <p class="hero-sub">Mi primer carrete, revelado en público: seis fotos, una hoja de contactos
+      y esta cordillera que asomó sola una mañana de marzo y ya nunca volvió a repetirse.
+      Baja despacio — el cuarto oscuro está al fondo.</p>
+  </div>
+
+  <span class="exif-l">Sierra Nevada — 6:47 a.m. · cara B del carrete</span>
+  <span class="exif-r">35 mm — f/8 — ISO 400</span>
+  <span class="scroll-cue">Desliza<i></i></span>
+</section>
+
+<!-- ============ cinta ============ -->
+<div class="marquee" aria-hidden="true">
+  <div class="mq-track" id="mq">
+    <div class="mq-g">
+      <span>Luz</span><svg class="ast" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 2v20M2 12h20M5 5l14 14M19 5L5 19"/></svg>
+      <span>Sombra</span><svg class="ast" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 2v20M2 12h20M5 5l14 14M19 5L5 19"/></svg>
+      <span>Tiempo</span><svg class="ast" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 2v20M2 12h20M5 5l14 14M19 5L5 19"/></svg>
+      <span>Azar</span><svg class="ast" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 2v20M2 12h20M5 5l14 14M19 5L5 19"/></svg>
+      <span>Grano</span><svg class="ast" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 2v20M2 12h20M5 5l14 14M19 5L5 19"/></svg>
+      <span>Polvo</span><svg class="ast" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 2v20M2 12h20M5 5l14 14M19 5L5 19"/></svg>
+      <span>Silencio</span><svg class="ast" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 2v20M2 12h20M5 5l14 14M19 5L5 19"/></svg>
+    </div>
+  </div>
+</div>
+
+<main>
+  <!-- ============ 01 génesis ============ -->
+  <section class="sec gen" id="genesis">
+    <span class="ghost" aria-hidden="true">001</span>
+    <div class="sec-head rv">
+      <span class="sec-n">(01)</span><h2>Génesis</h2>
+      <span class="sec-line"></span><span class="sec-tag">cuaderno de laboratorio</span>
+    </div>
+    <div class="gen-grid">
+      <div>
+        <p class="gen-big rv" style="--d:.05s">Esta web nace de un <em>azar</em>: una cámara heredada
+          y la sospecha de que la luz siempre llega <em>dos veces</em> — una ante la cosa, y otra,
+          mucho después, al mirar la foto. Aquí cuelgo mis primeras fotografías, tal cual salieron:
+          con sus errores, sus aciertos y sus <em>verdades a medias</em>. Como la del encabezado:
+          la montaña la hizo la luz una sola mañana y ya nunca se repitió.</p>
+        <span class="gen-note rv" style="--d:.15s">Entrada nº 001 — escrita el día que me atreví.</span>
+      </div>
+      <aside>
+        <dl class="meta rv" style="--d:.1s">
+          <div><dt>Lugar</dt><dd>Granada, España</dd></div>
+          <div><dt>Cámara</dt><dd>Minolta X-300 · 35 mm</dd></div>
+          <div><dt>Formato</dt><dd>Analógico · 36 exposiciones</dd></div>
+          <div><dt>Revelado</dt><dd>A mano, tanque Patiño</dd></div>
+        </dl>
+        <figure class="gen-photo rv-img" style="--d:.2s">
+          <div class="ph-frame"><img src="https://picsum.photos/seed/mpp-primera/700/933.jpg" alt="La primera fotografía del autor" loading="lazy"></div>
+          <figcaption>F-000 · la primera que me atreví a disparar</figcaption>
+        </figure>
+      </aside>
+    </div>
+  </section>
+
+  <!-- ============ 02 primer rollo ============ -->
+  <section class="sec" id="rollo">
+    <div class="sec-head rv">
+      <span class="sec-n">(02)</span><h2>Primer rollo</h2>
+      <span class="sec-line"></span><span class="sec-tag">seis de veinticuatro</span>
+    </div>
+    <div class="roll">
+      <figure class="ph f1 rv-img">
+        <div class="ph-frame"><img src="https://picsum.photos/seed/mpp-ventana/1300/975.jpg" alt="Ventana a las 7:12" loading="lazy"></div>
+        <figcaption><span class="ph-n">001</span><span class="ph-t">Ventana a las 7:12</span><span class="ph-x">f/2.8 · 1/125 · ISO 200</span></figcaption>
+      </figure>
+      <figure class="ph f2 rv-img" style="--d:.1s">
+        <div class="ph-frame"><img src="https://picsum.photos/seed/mpp-perro/760/1013.jpg" alt="El perro del vecino" loading="lazy"></div>
+        <figcaption><span class="ph-n">002</span><span class="ph-t">El perro del vecino</span><span class="ph-x">f/4 · 1/500</span></figcaption>
+      </figure>
+      <blockquote class="roll-quote rv">
+        <p>«Enfoqué tres veces y temblé once. El resto lo hizo la luz, que es generosa con quien sabe esperarla.»</p>
+        <cite>— nota al margen, primer cuaderno</cite>
+      </blockquote>
+      <figure class="ph f3 rv-img">
+        <div class="ph-frame"><img src="https://picsum.photos/seed/mpp-niebla/900/900.jpg" alt="Niebla en la cumbre" loading="lazy"></div>
+        <figcaption><span class="ph-n">003</span><span class="ph-t">Niebla en la cumbre</span><span class="ph-x">f/8 · 1/250</span></figcaption>
+      </figure>
+      <figure class="ph f4 rv-img" style="--d:.1s">
+        <div class="ph-frame"><img src="https://picsum.photos/seed/mpp-sillas/1300/867.jpg" alt="Sillas que esperan" loading="lazy"></div>
+        <figcaption><span class="ph-n">004</span><span class="ph-t">Sillas que esperan</span><span class="ph-x">f/5.6 · 1/60</span></figcaption>
+      </figure>
+      <figure class="ph f5 rv-img">
+        <div class="ph-frame"><img src="https://picsum.photos/seed/mpp-contraluz/1100/880.jpg" alt="Contraluz involuntario" loading="lazy"></div>
+        <figcaption><span class="ph-n">005</span><span class="ph-t">Contraluz involuntario</span><span class="ph-x">f/16 · 1/1000</span></figcaption>
+      </figure>
+      <figure class="ph f6 rv-img" style="--d:.1s">
+        <div class="ph-frame"><img src="https://picsum.photos/seed/mpp-ultima/1400/788.jpg" alt="Última del carrete" loading="lazy"></div>
+        <figcaption><span class="ph-n">006</span><span class="ph-t">Última del carrete</span><span class="ph-x">f/2 · 1/30 · movida</span></figcaption>
+      </figure>
+      <div class="roll-end rv">
+        <b>*</b>
+        <span>La 006 salió movida. La dejo porque el movimiento, al final, también es una forma de recordar.</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 03 hoja de contactos ============ -->
+  <section class="sec" id="contactos">
+    <div class="sec-head rv">
+      <span class="sec-n">(03)</span><h2>Hoja de contactos</h2>
+      <span class="sec-line"></span><span class="sec-tag">lo que no eligieron</span>
+    </div>
+    <div class="strip-zone rv">
+      <div class="strip" id="strip" data-cursor="Arrastra">
+        <div class="strip-track" id="stripTrack"></div>
+      </div>
+    </div>
+    <p class="strip-hint rv">
+      <svg viewBox="0 0 24 24"><path d="M4 12h16M14 6l6 6-6 6"/></svg>
+      Arrastra la tira — los fotogramas tachados son los descartes
+    </p>
+  </section>
+
+  <!-- ============ 04 cuarto oscuro ============ -->
+  <section class="sec dark" id="oscuro">
+    <div class="sec-head rv">
+      <span class="sec-n">(04)</span><h2>Cuarto oscuro</h2>
+      <span class="sec-line"></span><span class="sec-tag">serie en blanco y negro</span>
+    </div>
+    <div class="viewer rv">
+      <div class="v-stage" id="vStage" data-cursor="Arrastra">
+        <button class="v-btn" id="vPrev" aria-label="Fotografía anterior"><svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg></button>
+        <button class="v-btn" id="vNext" aria-label="Fotografía siguiente"><svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></button>
+      </div>
+      <div class="v-bar">
+        <div class="v-cap" id="vCap"></div>
+        <div class="v-cnt" id="vCnt"></div>
+      </div>
+      <div class="v-prog"><div id="vFill"></div></div>
+      <p class="v-key">Flechas ← → o arrastra para pasar el carrete</p>
+    </div>
+  </section>
+</main>
+
+<!-- ============ 05 correo ============ -->
+<footer id="correo">
+  <div class="sec-head rv">
+    <span class="sec-n">(05)</span><h2>Correspondencia</h2>
+    <span class="sec-line"></span><span class="sec-tag">última copia del sobre</span>
+  </div>
+  <p class="f-lead rv">¿Revelamos algo juntos? Acepto encargos, errores y proyectos a medio hacer.
+    Respondo rápido y a la primera.</p>
+  <a class="mail rv" style="--d:.1s" href="mailto:hola@miprimerapresentacion.es" data-cursor="Escribe">
+    hola@miprimerapresentacion.es
+    <svg viewBox="0 0 24 24"><path d="M7 17L17 7M9 7h8v8"/></svg>
+  </a>
+  <div class="f-grid rv">
+    <div><b>Taller</b>Granada, España<br><span class="clock">--:--:--</span> hora local</div>
+    <div><b>Coordenadas</b>37.1770° N<br>3.5985° O</div>
+    <div><b>Por fuera</b><a href="https://www.instagram.com" target="_blank" rel="noopener">Instagram</a><br><a href="https://www.behance.net" target="_blank" rel="noopener">Behance</a></div>
+    <div><b>Colofón</b>Hecha a mano, luz propia.<br>Diseño y fotografía: la misma persona.</div>
+  </div>
+  <div class="f-bottom">
+    <span>© MMXXV · Mi primera presentación — estudio de fotografía</span>
+    <span>Entrada nº 001 · seguirá subiendo fotos</span>
+  </div>
+</footer>
+
+<script>
+(() => {
+  const $  = (s,c=document)=>c.querySelector(s);
+  const $$ = (s,c=document)=>[...c.querySelectorAll(s)];
+  const fine    = matchMedia('(pointer:fine)').matches;
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(fine) document.documentElement.classList.add('fine');
+
+  /* ================= HERO: paralaje ================= */
+  const hero=$('#hero'), heroMedia=$('#heroMedia');
+  let heroVis=true;
+  new IntersectionObserver(es=>{heroVis=es[0].isIntersecting},{threshold:0}).observe(hero);
+
+  /* ================= cursor propio ================= */
+  const cur=$('#cursor'), dot=$('.c-dot'), ring=$('.c-ring'), lab=$('.c-label');
+  let tx=-100,ty=-100, crx=-100,cry=-100;
+  if(fine){
+    addEventListener('pointermove',e=>{tx=e.clientX;ty=e.clientY;cur.classList.add('vis')});
+    document.addEventListener('pointerover',e=>{
+      const t=e.target.closest('[data-cursor],a,button,.ph-frame');
+      if(t){ ring.classList.add('on'); lab.textContent=(t instanceof HTMLElement && t.dataset.cursor)||''; }
+      else { ring.classList.remove('on'); lab.textContent=''; }
+    });
+  }
+
+  /* ================= hoja de contactos ================= */
+  const strip=$('#strip'), track=$('#stripTrack');
+  for(let i=0;i<12;i++){
+    const rej=(i===3||i===8);
+    const d=document.createElement('div'); d.className='frame'+(rej?' rej':'');
+    d.innerHTML =
+      `<div class="perf">${'<span></span>'.repeat(9)}</div>`+
+      `<div class="f-img"><img src="https://picsum.photos/seed/mpp-contacto-${i+1}/320/210.jpg" alt="Fotograma B·${String(i+1).padStart(2,'0')}" loading="lazy">`+
+      (rej?`<span class="rej-x"><svg viewBox="0 0 24 24"><path d="M5 5l14 14M19 5L5 19"/></svg></span>`:'')+`</div>`+
+      `<div class="f-tag">B·${String(i+1).padStart(2,'0')}</div>`+
+      `<div class="perf">${'<span></span>'.repeat(9)}</div>`;
+    track.appendChild(d);
+  }
+  let scur=0, svx=0, sdrag=false, sx0=0, sstartX=0;
+  const sBound=()=>Math.min(0, strip.clientWidth-track.scrollWidth);
+  strip.addEventListener('pointerdown',e=>{sdrag=true;sx0=e.clientX;sstartX=scur;svx=0;strip.setPointerCapture(e.pointerId)});
+  strip.addEventListener('pointermove',e=>{if(!sdrag)return;const nx=sstartX+(e.clientX-sx0);svx=(nx-scur)*.6;scur=nx;});
+  const sEnd=()=>sdrag=false;
+  strip.addEventListener('pointerup',sEnd); strip.addEventListener('pointercancel',sEnd);
+  strip.addEventListener('wheel',e=>{ if(Math.abs(e.deltaX)>Math.abs(e.deltaY)){e.preventDefault();scur-=e.deltaX;} },{passive:false});
+  function stripTick(){
+    if(!sdrag){ scur+=svx; svx*=.93; }
+    const b=sBound();
+    if(scur>0){ scur+=(0-scur)*.18; svx=0; } else if(scur<b){ scur+=(b-scur)*.18; svx=0; }
+    track.style.transform=`translate3d(${Math.round(scur)}px,0,0)`;
+  }
+
+  /* ================= cuarto oscuro (visor) ================= */
+  const V=[
+    {s:'mpp-negra-01',t:'Madrugada en el 3:10 a Somontil',x:'f/1.8 · 1/15 · ISO 3200'},
+    {s:'mpp-negra-02',t:'Árbol, dos veces',x:'f/11 · 1/60 · ISO 100'},
+    {s:'mpp-negra-03',t:'La mano de mi madre',x:'f/2.8 · 1/30 · ISO 400'},
+    {s:'mpp-negra-04',t:'Autobús nocturno',x:'f/1.4 · 1/8 · ISO 1600'},
+    {s:'mpp-negra-05',t:'Mar de fondo',x:'f/8 · 1/500 · ISO 100'}
+  ];
+  const stage=$('#vStage'), cap=$('#vCap'), cnt=$('#vCnt'), fill=$('#vFill');
+  V.forEach((d,i)=>{
+    const f=document.createElement('figure');
+    f.className='v-slide'+(i?'':' on');
+    f.innerHTML=`<img src="https://picsum.photos/seed/${d.s}/1500/1000.jpg" alt="${d.t}" loading="lazy">`;
+    stage.appendChild(f);
+  });
+  const slides=$$('.v-slide',stage); let vi=0, viewerVis=false;
+  function go(n){
+    vi=(n+V.length)%V.length;
+    slides.forEach((s,i)=>s.classList.toggle('on',i===vi));
+    cap.innerHTML=`<span class="v-title">${V[vi].t}</span><span class="v-exif">${V[vi].x}</span>`;
+    cnt.innerHTML=`${String(vi+1).padStart(2,'0')}<span> / ${String(V.length).padStart(2,'0')}</span>`;
+    fill.style.transform=`scaleX(${(vi+1)/V.length})`;
+    cap.classList.remove('swap'); void cap.offsetWidth; cap.classList.add('swap');
+  }
+  $('#vPrev').addEventListener('click',()=>go(vi-1));
+  $('#vNext').addEventListener('click',()=>go(vi+1));
+  let vx0=null;
+  stage.addEventListener('pointerdown',e=>{vx0=e.clientX});
+  stage.addEventListener('pointerup',e=>{ if(vx0==null)return; const d=e.clientX-vx0; vx0=null;
+    if(Math.abs(d)>48) go(vi+(d<0?1:-1)); });
+  addEventListener('keydown',e=>{ if(!viewerVis)return;
+    if(e.key==='ArrowRight'){e.preventDefault();go(vi+1);}
+    if(e.key==='ArrowLeft'){e.preventDefault();go(vi-1);} });
+  new IntersectionObserver(es=>{viewerVis=es[0].isIntersecting},{threshold:.25}).observe($('#oscuro'));
+  go(0);
+
+  /* ================= relojes ================= */
+  const clocks=$$('.clock');
+  const fmt=new Intl.DateTimeFormat('es-ES',{hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false});
+  const tickClock=()=>{const t=fmt.format(new Date());clocks.forEach(c=>c.textContent=t)};
+  tickClock(); setInterval(tickClock,1000);
+
+  /* ================= reveals + progreso + marquee ================= */
+  const io=new IntersectionObserver(es=>es.forEach(en=>{
+    if(en.isIntersecting){en.target.classList.add('in');io.unobserve(en.target);}
+  }),{threshold:.15,rootMargin:'0px 0px -7% 0px'});
+  $$('.rv,.rv-img').forEach(el=>io.observe(el));
+
+  const prog=$('#progress');
+  addEventListener('scroll',()=>{
+    const h=document.documentElement;
+    prog.style.transform=`scaleX(${h.scrollTop/(h.scrollHeight-h.clientHeight||1)})`;
+  },{passive:true});
+
+  const mq=$('#mq'); mq.innerHTML+=mq.innerHTML; // duplica para el bucle
+
+  /* ================= bucle principal ================= */
+  setTimeout(()=>document.body.classList.add('loaded'),150);
+  let last=performance.now();
+  function tick(now){
+    const dt=Math.min(.05,(now-last)/1000); last=now;
+    if(heroVis && !reduced){
+      const t=Math.min(scrollY*0.22, hero.clientHeight*0.28);
+      heroMedia.style.transform=`translate3d(0,${t}px,0)`;
+    }
+    stripTick();
+    if(fine){
+      crx+=(tx-crx)*Math.min(1,dt*11); cry+=(ty-cry)*Math.min(1,dt*11);
+      dot.style.transform=`translate3d(${tx}px,${ty}px,0)`;
+      ring.style.transform=`translate3d(${crx}px,${cry}px,0)`;
+    }
+    requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+})();
+</script>
 </body>
 </html>
