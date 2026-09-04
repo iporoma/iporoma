@@ -390,16 +390,24 @@ footer {
     /* Ajuste específico para mobile */
 @media (max-width: 768px) {
   #modalThumbs.thumbs {
-    height: 90px;          /* 👈 acá controlás qué tan "corta" se ve en mobile */
+    height: 90px;           /* controla el alto total del carrusel de miniaturas */
   }
-}
 
-@media (max-width: 768px) {
-  .buttons {
-    display: none;           /* opción 1: ocultarlos en mobile */
-    /* o */
-    top: auto;
-    bottom: 10px;             /* opción 2: moverlos abajo, fuera de las miniaturas */
+  #modalThumbs.thumbs button {
+    height: 100%;
+    width: 56px;             /* o el ancho que ya tenías */
+    flex-shrink: 0;
+  }
+
+  #modalThumbs.thumbs button img {
+    height: 100%;
+    width: 100%;
+    object-fit: cover;       /* recorta la imagen sin deformarla */
+  }
+
+ .controls {
+    position: relative;      /* o static, según cómo esté armado el resto del layout */
+    margin-top: 8px;         /* separa los botones de las miniaturas */
   }
 }
  
