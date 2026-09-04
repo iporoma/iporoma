@@ -71,6 +71,18 @@ body {
     cursor: pointer
 }
 
+.menu-toggle {
+    display: none;
+    border: 1px solid #dce2df;
+    border-radius: 8px;
+    background: none;
+    color: inherit;
+    padding: 6px 11px;
+    font-size: 1.25rem;
+    line-height: 1;
+    cursor: pointer;
+}
+
 .hero {
     padding: 100px 7vw;
     scroll-margin-top: 76px;
@@ -236,6 +248,43 @@ body {
     cursor: pointer
 }
 
+.count {
+    color: #8b969c;
+    font-size: .8rem;
+    letter-spacing: .05em;
+    margin-top: 18px
+}
+
+.thumbs {
+    display: flex;
+    gap: 8px;
+    margin-top: 12px;
+    flex-wrap: wrap
+}
+
+.thumbs button {
+    border: 2px solid transparent;
+    border-radius: 4px;
+    padding: 0;
+    background: none;
+    cursor: pointer;
+    opacity: .55;
+    transition: opacity .25s, border-color .25s
+}
+
+.thumbs button.active {
+    opacity: 1;
+    border-color: var(--accent)
+}
+
+.thumbs img {
+    display: block;
+    width: 56px;
+    height: 40px;
+    object-fit: cover;
+    border-radius: 2px
+}
+
 .controls {
     display: flex;
     gap: 10px;
@@ -349,8 +398,39 @@ footer {
         margin-top: 8px
     }
 
+    .menu-toggle {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .nav {
+        position: sticky;
+    }
+
+    .nav > #navLinks {
+        display: none;
+        position: absolute;
+        top: 76px;
+        left: 0;
+        right: 0;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 16px;
+        padding: 20px 6vw 26px;
+        background: #f6f7f5f7;
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid #e2e7e4;
+        z-index: 4;
+    }
+
+    .nav > #navLinks.open {
+        display: flex;
+    }
+
     .nav a {
-        display: none
+        margin-left: 0;
+        font-size: 1rem;
     }
 
 }
@@ -366,7 +446,10 @@ footer {
      .
     </i>
    </a>
-   <div>
+   <button class="menu-toggle" id="menuToggle" aria-expanded="false" aria-label="Abrir men&uacute;">
+    &#9776;
+   </button>
+   <div id="navLinks">
     <a href="#galerias">
      Galer&iacute;as
     </a>
@@ -480,6 +563,10 @@ footer {
      </h3>
      <p id="modalStory">
      </p>
+     <div class="count" id="modalCount">
+     </div>
+     <div class="thumbs" id="modalThumbs">
+     </div>
      <div class="controls">
       <button id="prev">
        &larr; Anterior
@@ -506,9 +593,76 @@ const img = document.querySelector('#modalImg');
 const title = document.querySelector('#modalTitle');
 const kicker = document.querySelector('#modalKicker');
 const story = document.querySelector('#modalStory');
+const count = document.querySelector('#modalCount');
+const thumbs = document.querySelector('#modalThumbs');
 const langButton = document.querySelector('#lang');
+const menuToggle = document.querySelector('#menuToggle');
+const navLinks = document.querySelector('#navLinks');
 
-let i = 0;
+function closeMobileMenu() {
+    navLinks.classList.remove('open');
+    menuToggle.setAttribute('aria-expanded', 'false');
+    menuToggle.innerHTML = '&#9776;';
+}
+
+menuToggle.onclick = () => {
+    const isOpen = navLinks.classList.toggle('open');
+    menuToggle.setAttribute('aria-expanded', String(isOpen));
+    menuToggle.innerHTML = isOpen ? '&#10005;' : '&#9776;';
+};
+
+document.addEventListener('click', (e) => {
+    const clickedInsideNav = e.target.closest('.nav');
+
+    if (!clickedInsideNav && navLinks.classList.contains('open')) {
+        closeMobileMenu();
+    }
+});
+
+// Imágenes EXTRA de cada galería. La primera de cada lista es la misma
+// que se ve en la miniatura de la sección "Galerías"; las siguientes
+// solo aparecen al abrir esa tarjeta en el modal.
+const galleryImages = [
+    [ // 01 — Primeros pasos
+        'https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=1200&q=85',
+        'https://images.unsplash.com/photo-1502920917128-1aa500764cbd?auto=format&fit=crop&w=1200&q=85',
+        'https://images.unsplash.com/photo-1495707902641-75cac588d2e9?auto=format&fit=crop&w=1200&q=85',
+        'https://images.unsplash.com/photo-1554048612-b6a482bc67e5?auto=format&fit=crop&w=1200&q=85'
+    ],
+    [ // 02 — Luz encontrada
+        'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1200&q=85',
+        'https://images.unsplash.com/photo-1470770903676-69b98201ea1c?auto=format&fit=crop&w=1200&q=85',
+        'https://images.unsplash.com/photo-1444927714506-8492d94b5ba0?auto=format&fit=crop&w=1200&q=85',
+        'https://images.unsplash.com/photo-1465146344425-f00d5f5c8f07?auto=format&fit=crop&w=1200&q=85'
+    ],
+    [ // 03 — Ritmo urbano
+        'https://images.unsplash.com/photo-1519501025264-65ba15a82390?auto=format&fit=crop&w=1200&q=85',
+        'https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?auto=format&fit=crop&w=1200&q=85',
+        'https://images.unsplash.com/photo-1449824913935-59a10b8d2000?auto=format&fit=crop&w=1200&q=85',
+        'https://images.unsplash.com/photo-1470252649378-9c29740c9fa8?auto=format&fit=crop&w=1200&q=85'
+    ],
+    [ // 04 — Detalles
+        'https://images.unsplash.com/photo-1497250681960-ef046c08a56e?auto=format&fit=crop&w=1200&q=85',
+        'https://images.unsplash.com/photo-1465101162946-4377e57745c3?auto=format&fit=crop&w=1200&q=85',
+        'https://images.unsplash.com/photo-1518837695005-2083093ee35b?auto=format&fit=crop&w=1200&q=85',
+        'https://images.unsplash.com/photo-1524492412937-b28074a5d7da?auto=format&fit=crop&w=1200&q=85'
+    ],
+    [ // 05 — El instante
+        'https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=1200&q=85',
+        'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=1200&q=85',
+        'https://images.unsplash.com/photo-1531123897727-8f129e1688ce?auto=format&fit=crop&w=1200&q=85',
+        'https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?auto=format&fit=crop&w=1200&q=85'
+    ],
+    [ // 06 — Mejor obra
+        'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1200&q=85',
+        'https://images.unsplash.com/photo-1471943311424-646960669fbc?auto=format&fit=crop&w=1200&q=85',
+        'https://images.unsplash.com/photo-1441716844725-09cedc13a4e7?auto=format&fit=crop&w=1200&q=85',
+        'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=1200&q=85'
+    ]
+];
+
+let current = 0; // qué tarjeta/galería está abierta
+let i = 0; // índice de imagen dentro de esa galería
 
 const translations = {
     es: {
@@ -585,27 +739,55 @@ function setLanguage(lang) {
     });
 
     if (modal.classList.contains('open')) {
-        show(i);
+        renderModal();
     }
 }
 
-function show(n) {
-    i = (n + cards.length) % cards.length;
-    const c = cards[i];
-
-    img.src = c.querySelector('img').src;
-    title.textContent = c.dataset.currentTitle || c.dataset.title;
-    kicker.textContent = c.dataset.currentKicker || c.dataset.kicker;
-    story.textContent = c.dataset.currentStory || c.dataset.story;
+// Abre el modal en la tarjeta "n", siempre empezando por su primera imagen.
+function openGallery(n) {
+    current = (n + cards.length) % cards.length;
+    i = 0;
+    renderModal();
     modal.classList.add('open');
 }
 
+// Cambia de imagen DENTRO de la galería que está abierta (no cambia de tarjeta).
+function changeImage(step) {
+    const imgs = galleryImages[current];
+    i = (i + step + imgs.length) % imgs.length;
+    renderModal();
+}
+
+// Pinta el contenido actual del modal: imagen, textos, contador y miniaturas.
+function renderModal() {
+    const c = cards[current];
+    const imgs = galleryImages[current];
+
+    img.src = imgs[i];
+    title.textContent = c.dataset.currentTitle || c.dataset.title;
+    kicker.textContent = c.dataset.currentKicker || c.dataset.kicker;
+    story.textContent = c.dataset.currentStory || c.dataset.story;
+    count.textContent = `${i + 1} / ${imgs.length}`;
+
+    thumbs.innerHTML = '';
+    imgs.forEach((src, index) => {
+        const b = document.createElement('button');
+        b.className = index === i ? 'active' : '';
+        b.innerHTML = `<img src="${src}"/>`;
+        b.onclick = () => {
+            i = index;
+            renderModal();
+        };
+        thumbs.appendChild(b);
+    });
+}
+
 cards.forEach((c, n) => {
-    c.onclick = () => show(n);
+    c.onclick = () => openGallery(n);
 });
 
-document.querySelector('#next').onclick = () => show(i + 1);
-document.querySelector('#prev').onclick = () => show(i - 1);
+document.querySelector('#next').onclick = () => changeImage(1);
+document.querySelector('#prev').onclick = () => changeImage(-1);
 document.querySelector('#close').onclick = () => modal.classList.remove('open');
 
 modal.onclick = (e) => {
@@ -617,14 +799,19 @@ modal.onclick = (e) => {
 document.onkeydown = (e) => {
     if (e.key === 'Escape') {
         modal.classList.remove('open');
+        closeMobileMenu();
+    }
+
+    if (!modal.classList.contains('open')) {
+        return;
     }
 
     if (e.key === 'ArrowRight') {
-        show(i + 1);
+        changeImage(1);
     }
 
     if (e.key === 'ArrowLeft') {
-        show(i - 1);
+        changeImage(-1);
     }
 };
 
@@ -644,6 +831,7 @@ document.querySelectorAll('.nav a[href^="#"]').forEach((link) => {
         }
 
         event.preventDefault();
+        closeMobileMenu();
         target.scrollIntoView({
             behavior: 'smooth',
             block: 'start'
