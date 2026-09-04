@@ -387,9 +387,12 @@ footer {
     .modal {
         overflow: auto
     }
-    .modal thumbs img {
-     height: 2vh
-    }
+    /* Ajuste específico para mobile */
+@media (max-width: 768px) {
+  #modalThumbs.thumbs {
+    height: 90px;          /* 👈 acá controlás qué tan "corta" se ve en mobile */
+  }
+}
 
     footer {
         padding: 25px 6vw;
