@@ -498,10 +498,12 @@ footer {
       .
      </h1>
 <p>
-Texto de muestra.
-</p>
+Un recorrido visual por el aprendizaje autodidacta de una Canon EOS T3i: desde los primeros intentos hasta las imágenes que encontraron su propia voz.</p>
          </div>
-    <img alt="C&aacute;mara fotogr&aacute;fica" src="./images/canon-eost3i.jpg?auto=format&amp;fit=crop&amp;w=1100&amp;q=85"/>
+    <!-- Reemplazá este src por tu propia foto (ej: "./images/canon-eost3i.jpg")
+         cuando subas el sitio con esa carpeta al lado del HTML. Mientras tanto
+         dejo una imagen de referencia para que la vista previa no quede vacía. -->
+    <img alt="C&aacute;mara fotogr&aacute;fica" src="https://images.unsplash.com/photo-1516035069371-29a1b244cc32?auto=format&amp;fit=crop&amp;w=1100&amp;q=85"/>
    </section>
    <section class="section dark" id="galerias">
     <h2>
@@ -687,52 +689,99 @@ const galleryImages = [
 let current = 0; // qué tarjeta/galería está abierta
 let i = 0; // índice de imagen dentro de esa galería
 
-const translations = {
-    es: {
-        navGallery: 'Galerías',
-        navAuthor: 'El autor',
-        eyebrow: 'Una cámara. Una mirada. Muchos comienzos.',
-        heroBefore: 'Aprender a',
-        heroEm: 'mirar',
-        heroText: 'Un recorrido visual por el aprendizaje autodidacta de una Canon EOS T3i: desde los primeros intentos hasta las imágenes que encontraron su propia voz.',
-        galleryTitle: 'Galerías',
-        authorTitle: 'Una mirada en evolución',
-        authorText: 'Cada botón abre una galería tipo banner-carrousel. Puedes cambiar las imágenes, títulos y relatos directamente en los atributos de cada tarjeta.',
-        prev: '← Anterior',
-        next: 'Siguiente →',
-        footer: 'Archivo visual de aprendizaje autodidacta · Canon EOS Rebel T3i',
-        cards: [
-            ['Primeros pasos', 'Capítulo 01 / Descubrir', 'La emoción de presionar el disparador y comenzar a observar la luz.', 'Descubrir'],
-            ['Luz encontrada', 'Capítulo 02 / Experimentar', 'Errores, encuadres inesperados y la paciencia de aprender haciendo.', 'Experimentar'],
-            ['Ritmo urbano', 'Capítulo 03 / Encontrar', 'Entre calles, reflejos y movimiento apareció una sensibilidad propia.', 'Encontrar'],
-            ['Detalles', 'Capítulo 03 / Encontrar', 'Una textura, una hoja y la belleza de lo que suele pasar desapercibido.', 'Encontrar'],
-            ['El instante', 'Capítulo 04 / Compartir', 'Cada retrato es una conversación silenciosa entre quien mira y quien decide quedarse.', 'Compartir'],
-            ['Mejor obra', 'Capítulo 04 / Compartir', 'La técnica deja espacio para lo esencial: reconocer una imagen cuando finalmente aparece.', 'Mejor selección']
-        ]
-    },
-    en: {
-        navGallery: 'Galleries',
-        navAuthor: 'The author',
-        eyebrow: 'One camera. One perspective. Many beginnings.',
-        heroBefore: 'Learning to',
-        heroEm: 'see',
-        heroText: 'A visual journey through self-taught learning with a Canon EOS T3i: from the first attempts to the images that found their own voice.',
-        galleryTitle: 'Galleries',
-        authorTitle: 'A perspective in evolution',
-        authorText: 'Each button opens a banner-carousel gallery. You can change the images, titles, and stories directly in each card’s attributes.',
-        prev: '← Previous',
-        next: 'Next →',
-        footer: 'Visual archive of self-taught learning · Canon EOS Rebel T3i',
-        cards: [
-            ['First steps', 'Chapter 01 / Discover', 'The excitement of pressing the shutter and beginning to observe light.', 'Discover'],
-            ['Found light', 'Chapter 02 / Experiment', 'Mistakes, unexpected framing, and the patience of learning by doing.', 'Experiment'],
-            ['Urban rhythm', 'Chapter 03 / Find', 'Among streets, reflections, and movement, a distinct sensitivity emerged.', 'Find'],
-            ['Details', 'Chapter 03 / Find', 'A texture, a leaf, and the beauty of what often goes unnoticed.', 'Find'],
-            ['The moment', 'Chapter 04 / Share', 'Every portrait is a silent conversation between the one who looks and the one who chooses to stay.', 'Share'],
-            ['Best work', 'Chapter 04 / Share', 'Technique makes room for what matters: recognizing an image when it finally appears.', 'Best selection']
-        ]
+// ------------------------------------------------------------------
+// FIX: en vez de tener el español "hardcodeado" en un objeto separado
+// (que pisaba cualquier edición hecha en el HTML), lo capturamos en
+// vivo desde el propio HTML apenas carga la página. Así el HTML es
+// la única fuente de verdad para el español: lo que escribas ahí
+// es lo que se va a ver, siempre.
+// ------------------------------------------------------------------
+function captureSpanishContent() {
+    const heroH1 = document.querySelector('.hero h1');
+    const heroEm = heroH1.querySelector('em');
+    const heroBeforeText = heroH1.childNodes[0].textContent.trim();
+
+    return {
+        navGallery: document.querySelector('nav a[href="#galerias"]').textContent.trim(),
+        navAuthor: document.querySelector('nav a[href="#autor"]').textContent.trim(),
+        eyebrow: document.querySelector('.eyebrow').textContent.trim(),
+        heroBefore: heroBeforeText,
+        heroEm: heroEm.textContent.trim(),
+        heroText: document.querySelector('.hero p').textContent.trim(),
+        galleryTitle: document.querySelector('#galerias h2').textContent.trim(),
+        authorTitle: document.querySelector('#autor h2').textContent.trim(),
+        authorText: document.querySelector('#autor p').textContent.trim(),
+        prev: document.querySelector('#prev').textContent.trim(),
+        next: document.querySelector('#next').textContent.trim(),
+        footer: document.querySelector('footer span').textContent.trim(),
+        cards: cards.map((c) => [
+            c.dataset.title,
+            c.dataset.kicker,
+            c.dataset.story,
+            c.querySelector('small').textContent.trim()
+        ])
+    };
+}
+
+// El español SIEMPRE sale en vivo del HTML (nunca es un objeto fijo).
+// El inglés ya no está escrito a mano: se genera automáticamente
+// traduciendo ese español mediante una API de traducción, la primera
+// vez que se toca el botón EN/ES (y se recalcula si el español cambió).
+const translations = { es: null, en: null };
+let esSnapshot = null;
+let enCache = null;
+
+const translationMemo = new Map();
+
+async function translateText(text) {
+    if (!text) return text;
+    if (translationMemo.has(text)) return translationMemo.get(text);
+
+    try {
+        const res = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=es|en`);
+        const data = await res.json();
+        const translated = data?.responseData?.translatedText || text;
+        translationMemo.set(text, translated);
+        return translated;
+    } catch (err) {
+        console.error('No se pudo traducir:', text, err);
+        translationMemo.set(text, text);
+        return text;
     }
-};
+}
+
+async function buildEnglishTranslation(es) {
+    const [navGallery, navAuthor, eyebrow, heroBefore, heroEm, heroText, galleryTitle, authorTitle, authorText, prev, next, footer] = await Promise.all([
+        translateText(es.navGallery),
+        translateText(es.navAuthor),
+        translateText(es.eyebrow),
+        translateText(es.heroBefore),
+        translateText(es.heroEm),
+        translateText(es.heroText),
+        translateText(es.galleryTitle),
+        translateText(es.authorTitle),
+        translateText(es.authorText),
+        translateText(es.prev),
+        translateText(es.next),
+        translateText(es.footer)
+    ]);
+
+    const cards = await Promise.all(es.cards.map(async ([cardTitle, cardKicker, cardStory, cardLabel]) => {
+        const [t, k, s, l] = await Promise.all([
+            translateText(cardTitle),
+            translateText(cardKicker),
+            translateText(cardStory),
+            translateText(cardLabel)
+        ]);
+        return [t, k, s, l];
+    }));
+
+    return { navGallery, navAuthor, eyebrow, heroBefore, heroEm, heroText, galleryTitle, authorTitle, authorText, prev, next, footer, cards };
+}
+
+function esEquals(a, b) {
+    return JSON.stringify(a) === JSON.stringify(b);
+}
 
 function setLanguage(lang) {
     const t = translations[lang];
@@ -838,10 +887,44 @@ document.onkeydown = (e) => {
     }
 };
 
-langButton.onclick = () => {
+langButton.onclick = async () => {
     const nextLang = document.documentElement.lang === 'es' ? 'en' : 'es';
-    langButton.textContent = nextLang === 'en' ? 'ES / EN' : 'EN / ES';
-    setLanguage(nextLang);
+
+    if (nextLang === 'es') {
+        // El español vive siempre en el HTML: no hace falta traducir nada.
+        translations.es = esSnapshot;
+        langButton.textContent = 'EN / ES';
+        setLanguage('es');
+        return;
+    }
+
+    // Vamos a inglés: releemos el español actual (por si lo editaste)
+    // y, si cambió desde la última traducción, volvemos a traducir.
+    const freshEs = captureSpanishContent();
+    const needsTranslation = !enCache || !esEquals(freshEs, esSnapshot);
+
+    if (needsTranslation) {
+        const original = langButton.textContent;
+        langButton.disabled = true;
+        langButton.textContent = 'Traduciendo…';
+
+        try {
+            enCache = await buildEnglishTranslation(freshEs);
+            esSnapshot = freshEs;
+        } catch (err) {
+            console.error('Error al traducir automáticamente:', err);
+            langButton.disabled = false;
+            langButton.textContent = original;
+            return;
+        }
+
+        langButton.disabled = false;
+    }
+
+    translations.es = esSnapshot;
+    translations.en = enCache;
+    langButton.textContent = 'ES / EN';
+    setLanguage('en');
 };
 
 // Navegación suave para los enlaces internos del menú.
@@ -877,7 +960,11 @@ const revealObserver = new IntersectionObserver((entries, observer) => {
 
 revealItems.forEach((item) => revealObserver.observe(item));
 
-// Inicializa los textos internos de las tarjetas en español.
+// Arranque: capturamos el español directamente del HTML (sea cual sea
+// el texto que hayas puesto) y lo mostramos. El inglés se genera recién
+// cuando el usuario toca el botón por primera vez.
+esSnapshot = captureSpanishContent();
+translations.es = esSnapshot;
 setLanguage('es');
 </script>
  </body>
