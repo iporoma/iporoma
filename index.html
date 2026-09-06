@@ -63,14 +63,6 @@ body {
     font-size: .85rem
 }
 
-.lang {
-    border:1px solid #dce2df;
-    border-radius: 30px;
-    background: none;
-    padding: 9px 14px;
-    cursor: pointer
-}
-
 .menu-toggle {
     display: none;
     border: 1px solid #dce2df;
@@ -479,9 +471,6 @@ footer {
     <a href="#autor">
      El autor
     </a>
-    <button class="lang" id="lang">
-     EN / ES
-    </button>
    </div>
   </nav>
   <main id="inicio">
@@ -498,8 +487,8 @@ footer {
       .
      </h1>
      <p>
-Un recorrido visual por el aprendizaje autodidacta con una Canon EOS T3i: desde los primeros intentos hasta las imágenes que encontraron su propia voz.</p>
-<p>Todo comenzó desde que se recibió una bendición, luego fue el descubrir una habilidad impensada, atreverse a expermentar, servir y disfrutar en cada oportunidad de disparo fotográfico</p>
+Un recorrido visual por el aprendizaje autodidacta con una Canon EOS T3i: desde los primeros intentos hasta las imágenes que encontraron su propia voz. <br>
+Todo comenzó desde que se recibió una bendición, luego fue el descubrir una habilidad impensada, atreverse a expermentar, servir y disfrutar en cada oportunidad de disparo fotográfico</p>
          </div>
     
     <img alt="C&aacute;mara fotogr&aacute;fica" src="./images/canon-eost3i.jpg?auto=format&amp;fit=crop&amp;w=1100&amp;q=85"/>
@@ -619,7 +608,6 @@ const kicker = document.querySelector('#modalKicker');
 const story = document.querySelector('#modalStory');
 const count = document.querySelector('#modalCount');
 const thumbs = document.querySelector('#modalThumbs');
-const langButton = document.querySelector('#lang');
 const menuToggle = document.querySelector('#menuToggle');
 const navLinks = document.querySelector('#navLinks');
 
@@ -687,137 +675,6 @@ const galleryImages = [
 
 let current = 0; // qué tarjeta/galería está abierta
 let i = 0; // índice de imagen dentro de esa galería
-
-// ------------------------------------------------------------------
-// FIX: en vez de tener el español "hardcodeado" en un objeto separado
-// (que pisaba cualquier edición hecha en el HTML), lo capturamos en
-// vivo desde el propio HTML apenas carga la página. Así el HTML es
-// la única fuente de verdad para el español: lo que escribas ahí
-// es lo que se va a ver, siempre.
-// ------------------------------------------------------------------
-function captureSpanishContent() {
-    const heroH1 = document.querySelector('.hero h1');
-    const heroEm = heroH1.querySelector('em');
-    const heroBeforeText = heroH1.childNodes[0].textContent.trim();
-
-    return {
-        navGallery: document.querySelector('nav a[href="#galerias"]').textContent.trim(),
-        navAuthor: document.querySelector('nav a[href="#autor"]').textContent.trim(),
-        eyebrow: document.querySelector('.eyebrow').textContent.trim(),
-        heroBefore: heroBeforeText,
-        heroEm: heroEm.textContent.trim(),
-        heroText: document.querySelector('.hero p').innerHTML.trim(),
-        galleryTitle: document.querySelector('#galerias h2').textContent.trim(),
-        authorTitle: document.querySelector('#autor h2').textContent.trim(),
-        authorText: document.querySelector('#autor p').innerHTML.trim(),
-        prev: document.querySelector('#prev').textContent.trim(),
-        next: document.querySelector('#next').textContent.trim(),
-        footer: document.querySelector('footer span').textContent.trim(),
-        cards: cards.map((c) => [
-            c.dataset.title,
-            c.dataset.kicker,
-            c.dataset.story,
-            c.querySelector('small').textContent.trim()
-        ])
-    };
-}
-
-
-const translations = { es: null, en: null };
-let esSnapshot = null;
-let enCache = null;
-
-const translationMemo = new Map();
-
-async function translateText(text) {
-    if (!text) return text;
-    if (translationMemo.has(text)) return translationMemo.get(text);
-
-    try {
-        const res = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=es|en`);
-        const data = await res.json();
-        const translated = data?.responseData?.translatedText || text;
-        translationMemo.set(text, translated);
-        return translated;
-    } catch (err) {
-        console.error('No se pudo traducir:', text, err);
-        translationMemo.set(text, text);
-        return text;
-    }
-}
-
-
-async function translateHtmlWithBreaks(html) {
-    if (!html) return html;
-    const parts = html.split(/<br\s*\/?>/i);
-    const translatedParts = await Promise.all(parts.map((part) => translateText(part.trim())));
-    return translatedParts.join('<br>');
-}
-
-async function buildEnglishTranslation(es) {
-    const [navGallery, navAuthor, eyebrow, heroBefore, heroEm, heroText, galleryTitle, authorTitle, authorText, prev, next, footer] = await Promise.all([
-        translateText(es.navGallery),
-        translateText(es.navAuthor),
-        translateText(es.eyebrow),
-        translateText(es.heroBefore),
-        translateText(es.heroEm),
-        translateHtmlWithBreaks(es.heroText),
-        translateText(es.galleryTitle),
-        translateText(es.authorTitle),
-        translateHtmlWithBreaks(es.authorText),
-        translateText(es.prev),
-        translateText(es.next),
-        translateText(es.footer)
-    ]);
-
-    const cards = await Promise.all(es.cards.map(async ([cardTitle, cardKicker, cardStory, cardLabel]) => {
-        const [t, k, s, l] = await Promise.all([
-            translateText(cardTitle),
-            translateText(cardKicker),
-            translateHtmlWithBreaks(cardStory),
-            translateText(cardLabel)
-        ]);
-        return [t, k, s, l];
-    }));
-
-    return { navGallery, navAuthor, eyebrow, heroBefore, heroEm, heroText, galleryTitle, authorTitle, authorText, prev, next, footer, cards };
-}
-
-function esEquals(a, b) {
-    return JSON.stringify(a) === JSON.stringify(b);
-}
-
-function setLanguage(lang) {
-    const t = translations[lang];
-    document.documentElement.lang = lang;
-
-    document.querySelector('nav a[href="#galerias"]').textContent = t.navGallery;
-    document.querySelector('nav a[href="#autor"]').textContent = t.navAuthor;
-    document.querySelector('.eyebrow').textContent = t.eyebrow;
-    document.querySelector('.hero h1').childNodes[0].textContent = `\n      ${t.heroBefore}\n      `;
-    document.querySelector('.hero h1 em').textContent = t.heroEm;
-    document.querySelector('.hero p').innerHTML = t.heroText;
-    document.querySelector('#galerias h2').textContent = t.galleryTitle;
-    document.querySelector('#autor h2').textContent = t.authorTitle;
-    document.querySelector('#autor p').innerHTML = t.authorText;
-    document.querySelector('#prev').textContent = t.prev;
-    document.querySelector('#next').textContent = t.next;
-    document.querySelector('footer span').textContent = t.footer;
-    document.title = lang === 'es' ? 'Miradas | Canon EOS T3i' : 'Views | Canon EOS T3i';
-
-    cards.forEach((card, index) => {
-        const [cardTitle, cardKicker, cardStory, cardLabel] = t.cards[index];
-        card.querySelector('strong').textContent = `${String(index + 1).padStart(2, '0')} — ${cardTitle}`;
-        card.querySelector('small').textContent = cardLabel;
-        card.dataset.currentTitle = cardTitle;
-        card.dataset.currentKicker = cardKicker;
-        card.dataset.currentStory = cardStory;
-    });
-
-    if (modal.classList.contains('open')) {
-        renderModal();
-    }
-}
 
 // Abre el modal en la tarjeta "n", siempre empezando por su primera imagen.
 function openGallery(n) {
@@ -891,45 +748,6 @@ document.onkeydown = (e) => {
     }
 };
 
-langButton.onclick = async () => {
-    const nextLang = document.documentElement.lang === 'es' ? 'en' : 'es';
-
-    if (nextLang === 'es') {
-        // El español vive siempre en el HTML: no hace falta traducir nada.
-        translations.es = esSnapshot;
-        langButton.textContent = 'EN / ES';
-        setLanguage('es');
-        return;
-    }
-
-   
-    const freshEs = captureSpanishContent();
-    const needsTranslation = !enCache || !esEquals(freshEs, esSnapshot);
-
-    if (needsTranslation) {
-        const original = langButton.textContent;
-        langButton.disabled = true;
-        langButton.textContent = 'Traduciendo…';
-
-        try {
-            enCache = await buildEnglishTranslation(freshEs);
-            esSnapshot = freshEs;
-        } catch (err) {
-            console.error('Error al traducir automáticamente:', err);
-            langButton.disabled = false;
-            langButton.textContent = original;
-            return;
-        }
-
-        langButton.disabled = false;
-    }
-
-    translations.es = esSnapshot;
-    translations.en = enCache;
-    langButton.textContent = 'ES / EN';
-    setLanguage('en');
-};
-
 // Navegación suave para los enlaces internos del menú.
 document.querySelectorAll('.nav a[href^="#"]').forEach((link) => {
     link.addEventListener('click', (event) => {
@@ -962,11 +780,6 @@ const revealObserver = new IntersectionObserver((entries, observer) => {
 });
 
 revealItems.forEach((item) => revealObserver.observe(item));
-
-
-esSnapshot = captureSpanishContent();
-translations.es = esSnapshot;
-setLanguage('es');
 </script>
  </body>
 </html>
