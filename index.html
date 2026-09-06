@@ -499,8 +499,7 @@ footer {
      </h1>
      <p>
 Un recorrido visual por el aprendizaje autodidacta con una Canon EOS T3i: desde los primeros intentos hasta las imágenes que encontraron su propia voz. <br>
-Todo comenzó desde que se recibió una bendición,</p>
-     <p>Luego fue el descubrir una habilidad impensada, atreverse a expermentar, servir y disfrutar en cada oportunidad de disparo fotográfico</p>
+Todo comenzó desde que se recibió una bendición, luego fue el descubrir una habilidad impensada, atreverse a expermentar, servir y disfrutar en cada oportunidad de disparo fotográfico</p>
          </div>
     
     <img alt="C&aacute;mara fotogr&aacute;fica" src="./images/canon-eost3i.jpg?auto=format&amp;fit=crop&amp;w=1100&amp;q=85"/>
@@ -707,10 +706,10 @@ function captureSpanishContent() {
         eyebrow: document.querySelector('.eyebrow').textContent.trim(),
         heroBefore: heroBeforeText,
         heroEm: heroEm.textContent.trim(),
-        heroText: document.querySelector('.hero p').textContent.trim(),
+        heroText: document.querySelector('.hero p').innerHTML.trim(),
         galleryTitle: document.querySelector('#galerias h2').textContent.trim(),
         authorTitle: document.querySelector('#autor h2').textContent.trim(),
-        authorText: document.querySelector('#autor p').textContent.trim(),
+        authorText: document.querySelector('#autor p').innerHTML.trim(),
         prev: document.querySelector('#prev').textContent.trim(),
         next: document.querySelector('#next').textContent.trim(),
         footer: document.querySelector('footer span').textContent.trim(),
@@ -750,6 +749,16 @@ async function translateText(text) {
     }
 }
 
+// Traduce un texto que puede contener <br>: corta por cada salto de
+// línea, traduce cada parte por separado y las vuelve a unir con <br>,
+// así el salto de línea no se pierde ni se manda roto a la API.
+async function translateHtmlWithBreaks(html) {
+    if (!html) return html;
+    const parts = html.split(/<br\s*\/?>/i);
+    const translatedParts = await Promise.all(parts.map((part) => translateText(part.trim())));
+    return translatedParts.join('<br>');
+}
+
 async function buildEnglishTranslation(es) {
     const [navGallery, navAuthor, eyebrow, heroBefore, heroEm, heroText, galleryTitle, authorTitle, authorText, prev, next, footer] = await Promise.all([
         translateText(es.navGallery),
@@ -757,10 +766,10 @@ async function buildEnglishTranslation(es) {
         translateText(es.eyebrow),
         translateText(es.heroBefore),
         translateText(es.heroEm),
-        translateText(es.heroText),
+        translateHtmlWithBreaks(es.heroText),
         translateText(es.galleryTitle),
         translateText(es.authorTitle),
-        translateText(es.authorText),
+        translateHtmlWithBreaks(es.authorText),
         translateText(es.prev),
         translateText(es.next),
         translateText(es.footer)
@@ -770,7 +779,7 @@ async function buildEnglishTranslation(es) {
         const [t, k, s, l] = await Promise.all([
             translateText(cardTitle),
             translateText(cardKicker),
-            translateText(cardStory),
+            translateHtmlWithBreaks(cardStory),
             translateText(cardLabel)
         ]);
         return [t, k, s, l];
@@ -792,10 +801,10 @@ function setLanguage(lang) {
     document.querySelector('.eyebrow').textContent = t.eyebrow;
     document.querySelector('.hero h1').childNodes[0].textContent = `\n      ${t.heroBefore}\n      `;
     document.querySelector('.hero h1 em').textContent = t.heroEm;
-    document.querySelector('.hero p').textContent = t.heroText;
+    document.querySelector('.hero p').innerHTML = t.heroText;
     document.querySelector('#galerias h2').textContent = t.galleryTitle;
     document.querySelector('#autor h2').textContent = t.authorTitle;
-    document.querySelector('#autor p').textContent = t.authorText;
+    document.querySelector('#autor p').innerHTML = t.authorText;
     document.querySelector('#prev').textContent = t.prev;
     document.querySelector('#next').textContent = t.next;
     document.querySelector('footer span').textContent = t.footer;
@@ -838,7 +847,7 @@ function renderModal() {
     img.src = imgs[i];
     title.textContent = c.dataset.currentTitle || c.dataset.title;
     kicker.textContent = c.dataset.currentKicker || c.dataset.kicker;
-    story.textContent = c.dataset.currentStory || c.dataset.story;
+    story.innerHTML = c.dataset.currentStory || c.dataset.story;
     count.textContent = `${i + 1} / ${imgs.length}`;
 
     thumbs.innerHTML = '';
