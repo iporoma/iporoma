@@ -1,429 +1,426 @@
 <!doctype html>
 <html lang="es">
- <head>
-  <meta charset="utf-8"/>
-  <meta content="width=device-width,initial-scale=1" name="viewport"/>
-  <title>
-   Miradas | Canon EOS T3i
-  </title>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Miradas | Canon EOS T3i</title>
+
   <style>
+    @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600;700&family=Playfair+Display:wght@500&display=swap');
 
-@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600;700&family=Playfair+Display:wght@500&display=swap');
-:root {
-    --ink: #17212b;
-    --muted: #71808a;
-    --paper: #f6f7f5;
-    --accent: #d88962;
-    --dark: #18242c
-}
+    :root {
+      --ink: #17212b;
+      --muted: #71808a;
+      --paper: #f6f7f5;
+      --accent: #d88962;
+      --dark: #18242c;
+    }
 
-* {
-    box-sizing: border-box
-}
+    * {
+      box-sizing: border-box;
+    }
 
-html {
-    scroll-behavior: smooth;
-}
-
-body {
-    margin: 0;
-    background: var(--paper);
-    color: var(--ink);
-    font-family: 'DM Sans',sans-serif
-}
-
-.nav {
-    height: 76px;
-    padding: 0 7vw;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-bottom: 1px solid #e2e7e4;
-    position: sticky;
-    top: 0;
-    background: #f6f7f5ee;
-    backdrop-filter: blur(12px);
-    z-index: 3
-}
-
-.brand {
-    font-weight: 700;
-    letter-spacing: .1em
-}
-
-.brand i {
-    color: var(--accent);
-    font-style: normal
-}
-
-.nav a {
-    color: inherit;
-    text-decoration: none;
-    margin-left: 25px;
-    font-size: .85rem
-}
-
-.menu-toggle {
-    display: none;
-    border: 1px solid #dce2df;
-    border-radius: 8px;
-    background: none;
-    color: inherit;
-    padding: 6px 11px;
-    font-size: 1.25rem;
-    line-height: 1;
-    cursor: pointer;
-}
-
-.hero {
-    padding: 100px 7vw;
-    scroll-margin-top: 76px;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 7vw;
-    align-items: center
-}
-
-.eyebrow {
-    color: var(--accent);
-    letter-spacing: .18em;
-    text-transform: uppercase;
-    font-size: .72rem;
-    font-weight: 700
-}
-
-.hero h1 {
-    font:500 clamp(3.4rem,7vw,7rem)/.95 'Playfair Display',serif;
-    letter-spacing: -.06em;
-    margin: 22px 0
-}
-
-.hero h1 em {
-    color: var(--accent);
-    font-style: normal
-}
-
-.hero p {
-    color: var(--muted);
-    line-height: 1.7;
-    max-width: 520px
-}
-
-.hero img {
-    width: 100%;
-    height: 500px;
-    object-fit: cover;
-    border-radius: 5px 5px 85px 5px;
-    filter: saturate(.75)
-}
-
-.section {
-    padding: 80px 7vw;
-    scroll-margin-top: 76px
-}
-
-.section h2 {
-    font:500 clamp(2.4rem,5vw,4.5rem)/1 'Playfair Display',serif;
-    margin: 0 0 35px
-}
-
-.dark {
-    background: var(--dark);
-    color: #fff
-}
-
-.gallery {
-    display: grid;
-    grid-template-columns: repeat(3,1fr);
-    gap: 18px
-}
-
-.card {
-    border:0;
-    padding: 0;
-    background: none;
-    text-align: left;
-    cursor: pointer;
-    color: inherit;
-    transition: transform .35s,box-shadow .35s
-}
-
-.card:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 16px 28px #0d182633
-}
-
-.card img {
-    display: block;
-    width: 100%;
-    height: 270px;
-    object-fit: cover;
-    border-radius: 4px;
-    filter: saturate(.8);
-    transition: filter .35s
-}
-
-.card:hover img {
-    filter: saturate(1)
-}
-
-.card strong {
-    display: block;
-    padding: 15px 0 4px
-}
-
-.card small {
-    color: var(--muted)
-}
-
-.dark .card small {
-    color: #aab5ba
-}
-
-.modal {
-    display: none;
-    position: fixed;
-    inset:0;
-    background: #0d161df2;
-    z-index: 5;
-    padding: 6vw;
-    align-items: center;
-    justify-content: center
-}
-
-.modal.open {
-    display: flex;
-    animation: fade .3s
-}
-
-.modalbox {
-    max-width: 1100px;
-    width: 100%;
-    display: grid;
-    grid-template-columns: 1.2fr .8fr;
-    gap: 35px;
-    align-items: center;
-    color: #fff
-}
-
-.modal img {
-    width: 100%;
-    height: min(68vh,600px);
-    object-fit: cover
-}
-
-.modal h3 {
-    font:500 clamp(2.4rem,5vw,5rem)/1 'Playfair Display',serif;
-    margin: 12px 0
-}
-
-.modal p {
-    color: #bcc6ca;
-    line-height: 1.7
-}
-
-.modal .kicker {
-    color: var(--accent);
-    font-size: .72rem;
-    letter-spacing: .15em;
-    text-transform: uppercase
-}
-
-.close {
-    position: absolute;
-    right: 28px;
-    top: 18px;
-    color: #fff;
-    background: none;
-    border:0;
-    font-size: 2rem;
-    cursor: pointer
-}
-
-.count {
-    color: #8b969c;
-    font-size: .8rem;
-    letter-spacing: .05em;
-    margin-top: 18px
-}
-
-.thumbs {
-    display: flex;
-    gap: 8px;
-    margin-top: 12px;
-    flex-wrap: wrap
-}
-
-.thumbs button {
-    border: 2px solid transparent;
-    border-radius: 4px;
-    padding: 0;
-    background: none;
-    cursor: pointer;
-    opacity: .55;
-    transition: opacity .25s, border-color .25s
-}
-
-.thumbs button.active {
-    opacity: 1;
-    border-color: var(--accent)
-}
-
-.thumbs img {
-    display: block;
-    width: 56px;
-    height: 40px;
-    object-fit: cover;
-    border-radius: 2px
-}
-
-.controls {
-    display: flex;
-    gap: 10px;
-    margin-top: 25px
-}
-
-.controls button {
-    border:1px solid #6d7a80;
-    color: #fff;
-    background: none;
-    border-radius: 30px;
-    padding: 11px 15px;
-    cursor: pointer
-}
-
-.controls button:hover {
-    background: #fff;
-    color: var(--dark)
-}
-
-.section,
-.hero {
-    opacity: 0;
-    transform: translateY(24px);
-    transition: opacity .75s ease, transform .75s cubic-bezier(.22,1,.36,1)
-}
-
-.section.is-visible,
-.hero.is-visible {
-    opacity: 1;
-    transform: translateY(0)
-}
-
-.nav a {
-    transition: color .25s ease, opacity .25s ease
-}
-
-.nav a:hover {
-    opacity: .72
-}
-
-@media (prefers-reduced-motion: reduce) {
     html {
-        scroll-behavior: auto
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: 'DM Sans', sans-serif;
+    }
+
+    .nav {
+      height: 76px;
+      padding: 0 7vw;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #e2e7e4;
+      position: sticky;
+      top: 0;
+      background: #f6f7f5ee;
+      backdrop-filter: blur(12px);
+      z-index: 3;
+    }
+
+    .brand {
+      color: inherit;
+      text-decoration: none;
+      font-weight: 700;
+      letter-spacing: .1em;
+    }
+
+    .brand i {
+      color: var(--accent);
+      font-style: normal;
+    }
+
+    .nav a {
+      color: inherit;
+      text-decoration: none;
+      margin-left: 25px;
+      font-size: .85rem;
+      transition: opacity .25s ease;
+    }
+
+    .nav a:hover {
+      opacity: .72;
+    }
+
+    .menu-toggle {
+      display: none;
+      border: 1px solid #dce2df;
+      border-radius: 8px;
+      background: none;
+      color: inherit;
+      padding: 6px 11px;
+      font-size: 1.25rem;
+      line-height: 1;
+      cursor: pointer;
+    }
+
+    .hero {
+      padding: 100px 7vw;
+      scroll-margin-top: 76px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 7vw;
+      align-items: center;
+    }
+
+    .eyebrow {
+      color: var(--accent);
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      font-size: .72rem;
+      font-weight: 700;
+    }
+
+    .hero h1 {
+      font: 500 clamp(3.4rem, 7vw, 7rem)/.95 'Playfair Display', serif;
+      letter-spacing: -.06em;
+      margin: 22px 0;
+    }
+
+    .hero h1 em {
+      color: var(--accent);
+      font-style: normal;
+    }
+
+    .hero p {
+      color: var(--muted);
+      line-height: 1.7;
+      max-width: 520px;
+    }
+
+    .hero img {
+      width: 100%;
+      height: 500px;
+      object-fit: cover;
+      border-radius: 5px 5px 85px 5px;
+      filter: saturate(.75);
+    }
+
+    .section {
+      padding: 80px 7vw;
+      scroll-margin-top: 76px;
+    }
+
+    .section h2 {
+      font: 500 clamp(2.4rem, 5vw, 4.5rem)/1 'Playfair Display', serif;
+      margin: 0 0 35px;
+    }
+
+    .dark {
+      background: var(--dark);
+      color: #fff;
+    }
+
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+    }
+
+    .card {
+      border: 0;
+      padding: 0;
+      background: none;
+      text-align: left;
+      cursor: pointer;
+      color: inherit;
+      transition: transform .35s, box-shadow .35s;
+    }
+
+    .card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 16px 28px #0d182633;
+    }
+
+    .card img {
+      display: block;
+      width: 100%;
+      height: 270px;
+      object-fit: cover;
+      border-radius: 4px;
+      filter: saturate(.8);
+      transition: filter .35s;
+    }
+
+    .card:hover img {
+      filter: saturate(1);
+    }
+
+    .card strong {
+      display: block;
+      padding: 15px 0 4px;
+    }
+
+    .card small {
+      color: var(--muted);
+    }
+
+    .dark .card small {
+      color: #aab5ba;
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: #0d161df2;
+      z-index: 5;
+      padding: 6vw;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal.open {
+      display: flex;
+      animation: fade .3s;
+    }
+
+    .modalbox {
+      max-width: 1100px;
+      width: 100%;
+      display: grid;
+      grid-template-columns: 1.2fr .8fr;
+      gap: 35px;
+      align-items: center;
+      color: #fff;
+    }
+
+    .modal img {
+      width: 100%;
+      height: min(68vh, 600px);
+      object-fit: cover;
+    }
+
+    .modal h3 {
+      font: 500 clamp(2.4rem, 5vw, 5rem)/1 'Playfair Display', serif;
+      margin: 12px 0;
+    }
+
+    .modal p {
+      color: #bcc6ca;
+      line-height: 1.7;
+    }
+
+    .modal .kicker {
+      color: var(--accent);
+      font-size: .72rem;
+      letter-spacing: .15em;
+      text-transform: uppercase;
+    }
+
+    .close {
+      position: absolute;
+      right: 28px;
+      top: 18px;
+      color: #fff;
+      background: none;
+      border: 0;
+      font-size: 2rem;
+      cursor: pointer;
+    }
+
+    .count {
+      color: #8b969c;
+      font-size: .8rem;
+      letter-spacing: .05em;
+      margin-top: 18px;
+    }
+
+    .thumbs {
+      display: flex;
+      gap: 8px;
+      margin-top: 12px;
+      flex-wrap: wrap;
+    }
+
+    .thumbs button {
+      border: 2px solid transparent;
+      border-radius: 4px;
+      padding: 0;
+      background: none;
+      cursor: pointer;
+      opacity: .55;
+      transition: opacity .25s, border-color .25s;
+    }
+
+    .thumbs button.active {
+      opacity: 1;
+      border-color: var(--accent);
+    }
+
+    .thumbs img {
+      display: block;
+      width: 56px;
+      height: 40px;
+      object-fit: cover;
+      border-radius: 2px;
+    }
+
+    .controls {
+      display: flex;
+      gap: 10px;
+      margin-top: 25px;
+    }
+
+    .controls button {
+      border: 1px solid #6d7a80;
+      color: #fff;
+      background: none;
+      border-radius: 30px;
+      padding: 11px 15px;
+      cursor: pointer;
+    }
+
+    .controls button:hover {
+      background: #fff;
+      color: var(--dark);
     }
 
     .section,
     .hero {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity .75s ease,
+                  transform .75s cubic-bezier(.22, 1, .36, 1);
+    }
+
+    .section.is-visible,
+    .hero.is-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    footer {
+      padding: 28px 7vw;
+      color: var(--muted);
+      font-size: .8rem;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    @keyframes fade {
+      from {
+        opacity: 0;
+      }
+
+      to {
+        opacity: 1;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html {
+        scroll-behavior: auto;
+      }
+
+      .section,
+      .hero {
         opacity: 1;
         transform: none;
-        transition: none
-    }
-}
-
-@keyframes fade {
-    from {
-        opacity:0
+        transition: none;
+      }
     }
 
-    to {
-        opacity:1
-    }
-
-}
-
-footer {
-    padding: 28px 7vw;
-    color: var(--muted);
-    font-size: .8rem;
-    display: flex;
-    justify-content: space-between
-}
-
-@media (max-width: 750px) {
-    .hero {
+    @media (max-width: 750px) {
+      .hero {
         grid-template-columns: 1fr;
-        padding: 70px 6vw
-    }
+        padding: 70px 6vw;
+      }
 
-    .hero img {
-        height: 360px
-    }
+      .hero img {
+        height: 360px;
+      }
 
-    .section {
-        padding: 65px 6vw
-    }
+      .section {
+        padding: 65px 6vw;
+      }
 
-    .gallery {
-        grid-template-columns: 1fr
-    }
+      .gallery {
+        grid-template-columns: 1fr;
+      }
 
-    .modalbox {
-        grid-template-columns: 1fr
-    }
+      .modal {
+        overflow: auto;
+      }
 
-    .modal img {
-        height: 42vh
-    }
+      .modalbox {
+        grid-template-columns: 1fr;
+      }
 
-    .modal {
-        overflow: auto
-    }
-    /* Ajuste específico para mobile */
-@media (max-width: 768px) {
-  #modalThumbs.thumbs {
-    height: 90px;           /* controla el alto total del carrusel de miniaturas */
-  }
+      .modal img {
+        height: 42vh;
+      }
 
-  #modalThumbs.thumbs button {
-    height: 100%;
-    width: 56px;             /* o el ancho que ya tenías */
-    flex-shrink: 0;
-  }
+      #modalThumbs {
+        height: 90px;
+        flex-wrap: nowrap;
+        overflow-x: auto;
+      }
 
-  #modalThumbs.thumbs button img {
-    height: 100%;
-    width: 100%;
-    object-fit: cover;       /* recorta la imagen sin deformarla */
-  }
+      #modalThumbs button {
+        width: 56px;
+        height: 90px;
+        flex-shrink: 0;
+      }
 
- .controls {
-    position: relative;      /* o static, según cómo esté armado el resto del layout */
-    margin-top: 8px;         /* separa los botones de las miniaturas */
-  }
-}
- 
-    footer {
+      #modalThumbs button img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      .controls {
+        margin-top: 8px;
+      }
+
+      footer {
         padding: 25px 6vw;
-        display: block
-    }
-
-    footer span {
         display: block;
-        margin-top: 8px
-    }
+      }
 
-    .menu-toggle {
+      footer span {
+        display: block;
+        margin-top: 8px;
+      }
+
+      .menu-toggle {
         display: inline-flex;
         align-items: center;
         justify-content: center;
-    }
+      }
 
-    .nav {
+      .nav {
         position: sticky;
-    }
+      }
 
-    .nav > #navLinks {
+      .nav > #navLinks {
         display: none;
         position: absolute;
         top: 76px;
@@ -437,352 +434,514 @@ footer {
         backdrop-filter: blur(12px);
         border-bottom: 1px solid #e2e7e4;
         z-index: 4;
-    }
+      }
 
-    .nav > #navLinks.open {
+      .nav > #navLinks.open {
         display: flex;
-    }
+      }
 
-    .nav a {
+      .nav a {
         margin-left: 0;
         font-size: 1rem;
+      }
     }
+  </style>
+</head>
 
-}
+<body>
 
-
-    </style>
- </head>
- <body>
   <nav class="nav">
-   <a class="brand" href="#inicio">
-    MIRADAS
-    <i>
-     .
-    </i>
-   </a>
-   <button class="menu-toggle" id="menuToggle" aria-expanded="false" aria-label="Abrir men&uacute;">
-    &#9776;
-   </button>
-   <div id="navLinks">
-    <a href="#galerias">
-     Galer&iacute;as
+    <a class="brand" href="#inicio">
+      MIRADAS<i>.</i>
     </a>
-    <a href="#autor">
-     El autor
-    </a>
-   </div>
+
+    <button
+      class="menu-toggle"
+      id="menuToggle"
+      aria-expanded="false"
+      aria-label="Abrir menú">
+      &#9776;
+    </button>
+
+    <div id="navLinks">
+      <a href="#galerias">Galerías</a>
+      <a href="#autor">El autor</a>
+    </div>
   </nav>
+
   <main id="inicio">
-   <section class="hero">
-    <div>
-     <div class="eyebrow">
-      Una c&aacute;mara. Una mirada. Muchos comienzos.
-     </div>
-     <h1>
-      Aprender a
-      <em>
-       mirar
-      </em>
-      .
-     </h1>
-     <p>
-Un recorrido visual por el aprendizaje autodidacta con una cámara Canon EOS T3i; desde los primeros intentos hasta las imágenes que encontraron su propia voz.</p>
-     <p>
-Todo comenzó desde que se recibió una bendición, luego fue el descubrir una habilidad impensada, atreverse a expermentar, servir y disfrutar en cada oportunidad de disparo fotográfico</p>
-         </div>
-    
-    <img alt="C&aacute;mara fotogr&aacute;fica" src="./images/canon-eost3i.jpg?auto=format&amp;fit=crop&amp;w=1100&amp;q=85"/>
-   </section>
-   <section class="section dark" id="galerias">
-    <h2>
-     Galer&iacute;as
-    </h2>
-    <div class="gallery">
-     <button class="card" data-kicker="Cap&iacute;tulo 01 / Descubrir" data-story="La emoci&oacute;n de presionar el disparador y comenzar a observar la luz." data-title="Primeros pasos">
-      <img src="https://scontent-eze1-1.xx.fbcdn.net/v/t39.30808-6/649265372_10239822372153449_7705266467951166800_n.jpg?stp=dst-jpg_tt6&cstp=mx960x640&ctp=s960x640&_nc_cat=109&ccb=1-7&_nc_sid=cf85f3&_nc_ohc=9ffzR8Zyn6cQ7kNvwE2LKsH&_nc_oc=AdqhRJlvCBlG6BTl2YDeiFj334pE0kSvPAnJA7r3glmhgirO05dLoDmJpiuZRcibjn0&_nc_zt=23&_nc_ht=scontent-eze1-1.xx&_nc_gid=TNUcbVujApmzYZGBEKY3Hg&_nc_ss=7b2a8&oh=00_AQJGEvVJ-hZNCKYkniC5ngolbwwJlczmZ-kRYxV91_dW_g&oe=6AAB165D?auto=format&amp;fit=crop&amp;w=900&amp;q=85"/>
-      <strong>
-       01 &mdash; Primeros pasos
-      </strong>
-      <small>
-       Descubrir
-      </small>
-     </button>
-     <button class="card" data-kicker="Cap&iacute;tulo 02 / Experimentar" data-story="Errores, encuadres inesperados y la paciencia de aprender haciendo." data-title="Luz encontrada">
-      <img src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&amp;fit=crop&amp;w=900&amp;q=85"/>
-      <strong>
-       02 &mdash; Luz encontrada
-      </strong>
-      <small>
-       Experimentar
-      </small>
-     </button>
-     <button class="card" data-kicker="Cap&iacute;tulo 03 / Encontrar" data-story="Entre calles, reflejos y movimiento apareci&oacute; una sensibilidad propia." data-title="Ritmo urbano">
-      <img src="https://images.unsplash.com/photo-1519501025264-65ba15a82390?auto=format&amp;fit=crop&amp;w=900&amp;q=85"/>
-      <strong>
-       03 &mdash; Ritmo urbano
-      </strong>
-      <small>
-       Encontrar
-      </small>
-     </button>
-     <button class="card" data-kicker="Cap&iacute;tulo 03 / Encontrar" data-story="Una textura, una hoja y la belleza de lo que suele pasar desapercibido." data-title="Detalles">
-      <img src="https://images.unsplash.com/photo-1497250681960-ef046c08a56e?auto=format&amp;fit=crop&amp;w=900&amp;q=85"/>
-      <strong>
-       04 &mdash; Detalles
-      </strong>
-      <small>
-       Encontrar
-      </small>
-     </button>
-     <button class="card" data-kicker="Cap&iacute;tulo 04 / Compartir" data-story="Cada retrato es una conversaci&oacute;n silenciosa entre quien mira y quien decide quedarse." data-title="El instante">
-      <img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&amp;fit=crop&amp;w=900&amp;q=85"/>
-      <strong>
-       05 &mdash; El instante
-      </strong>
-      <small>
-       Compartir
-      </small>
-     </button>
-     <button class="card" data-kicker="Cap&iacute;tulo 04 / Compartir" data-story="La t&eacute;cnica deja espacio para lo esencial: reconocer una imagen cuando finalmente aparece." data-title="Mejor obra">
-      <img src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&amp;fit=crop&amp;w=900&amp;q=85"/>
-      <strong>
-       06 &mdash; Mejor obra
-      </strong>
-      <small>
-       Mejor selecci&oacute;n
-      </small>
-     </button>
-    </div>
-   </section>
-   <section class="section" id="autor">
-    <h2>
-     Una mirada en evoluci&oacute;n
-    </h2>
-    <p style="max-width:560px;color:var(--muted);line-height:1.7">
-     Cada bot&oacute;n abre una galer&iacute;a tipo banner-carrousel. Puedes cambiar las im&aacute;genes, t&iacute;tulos y relatos directamente en los atributos de cada tarjeta.
-    </p>
-   </section>
+
+    <section class="hero">
+      <div>
+        <div class="eyebrow">
+          Una cámara. Una mirada. Muchos comienzos.
+        </div>
+
+        <h1>
+          Aprender a <em>mirar</em>.
+        </h1>
+
+        <p>
+          Un recorrido visual por el aprendizaje autodidacta con una cámara
+          Canon EOS T3i; desde los primeros intentos hasta las imágenes que
+          encontraron su propia voz.
+        </p>
+
+        <p>
+          Todo comenzó desde que se recibió una bendición, luego fue descubrir
+          una habilidad impensada, atreverse a experimentar, servir y disfrutar
+          en cada oportunidad de disparo fotográfico.
+        </p>
+      </div>
+
+      <img
+        src="./images/canon-eost3i.jpg"
+        alt="Cámara fotográfica Canon EOS T3i">
+    </section>
+
+    <section class="section dark" id="galerias">
+      <h2>Galerías</h2>
+
+      <div class="gallery">
+
+        <button
+          class="card"
+          data-kicker="Capítulo 01 / Descubrir"
+          data-title="Primeros pasos">
+
+          <img
+            src="https://scontent-eze1-1.xx.fbcdn.net/v/t39.30808-6/649265372_10239822372153449_7705266467951166800_n.jpg?stp=dst-jpg_tt6&cstp=mx960x640&ctp=s960x640&_nc_cat=109&ccb=1-7&_nc_sid=cf85f3&_nc_ohc=9ffzR8Zyn6cQ7kNvwE2LKsH&_nc_oc=AdqhRJlvCBlG6BTl2YDeiFj334pE0kSvPAnJA7r3glmhgirO05dLoDmJpiuZRcibjn0&_nc_zt=23&_nc_ht=scontent-eze1-1.xx&_nc_gid=TNUcbVujApmzYZGBEKY3Hg&_nc_ss=7b2a8&oh=00_AQJGEvVJ-hZNCKYkniC5ngolbwwJlczmZ-kRYxV91_dW_g&oe=6AAB165D"
+            alt="Primeros pasos">
+
+          <strong>01 &mdash; Primeros pasos</strong>
+          <small>Descubrir</small>
+        </button>
+
+        <button
+          class="card"
+          data-kicker="Capítulo 02 / Experimentar"
+          data-title="Luz encontrada">
+
+          <img
+            src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=900&q=85"
+            alt="Luz encontrada">
+
+          <strong>02 &mdash; Luz encontrada</strong>
+          <small>Experimentar</small>
+        </button>
+
+        <button
+          class="card"
+          data-kicker="Capítulo 03 / Encontrar"
+          data-title="Ritmo urbano">
+
+          <img
+            src="https://images.unsplash.com/photo-1519501025264-65ba15a82390?auto=format&fit=crop&w=900&q=85"
+            alt="Ritmo urbano">
+
+          <strong>03 &mdash; Ritmo urbano</strong>
+          <small>Encontrar</small>
+        </button>
+
+        <button
+          class="card"
+          data-kicker="Capítulo 03 / Encontrar"
+          data-title="Detalles">
+
+          <img
+            src="https://images.unsplash.com/photo-1497250681960-ef046c08a56e?auto=format&fit=crop&w=900&q=85"
+            alt="Detalles">
+
+          <strong>04 &mdash; Detalles</strong>
+          <small>Encontrar</small>
+        </button>
+
+        <button
+          class="card"
+          data-kicker="Capítulo 04 / Compartir"
+          data-title="El instante">
+
+          <img
+            src="https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=900&q=85"
+            alt="El instante">
+
+          <strong>05 &mdash; El instante</strong>
+          <small>Compartir</small>
+        </button>
+
+        <button
+          class="card"
+          data-kicker="Capítulo 04 / Compartir"
+          data-title="Mejor obra">
+
+          <img
+            src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=900&q=85"
+            alt="Mejor obra">
+
+          <strong>06 &mdash; Mejor obra</strong>
+          <small>Mejor selección</small>
+        </button>
+
+      </div>
+    </section>
+
+    <section class="section" id="autor">
+      <h2>Una mirada en evolución</h2>
+
+      <p style="max-width:560px;color:var(--muted);line-height:1.7">
+        Cada botón abre una galería tipo banner-carrusel. Puedes cambiar las
+        imágenes, títulos y descripciones directamente en el código.
+      </p>
+    </section>
+
   </main>
-  <div class="modal" id="modal">
-   <button class="close" id="close">
-    &times;
-   </button>
-   <div class="modalbox">
-    <img id="modalImg"/>
-    <div>
-     <div class="kicker" id="modalKicker">
-     </div>
-     <h3 id="modalTitle">
-     </h3>
-     <p id="modalStory">
-     </p>
-     <div class="count" id="modalCount">
-     </div>
-     <div class="thumbs" id="modalThumbs">
-     </div>
-     <div class="controls">
-      <button id="prev">
-       &larr; Anterior
-      </button>
-      <button id="next">
-       Siguiente &rarr;
-      </button>
-     </div>
+
+  <div class="modal" id="modal" role="dialog" aria-modal="true">
+
+    <button class="close" id="close" aria-label="Cerrar galería">
+      &times;
+    </button>
+
+    <div class="modalbox">
+
+      <img id="modalImg" src="" alt="">
+
+      <div>
+        <div class="kicker" id="modalKicker"></div>
+
+        <h3 id="modalTitle"></h3>
+
+        <p id="modalStory"></p>
+
+        <div class="count" id="modalCount"></div>
+
+        <div class="thumbs" id="modalThumbs"></div>
+
+        <div class="controls">
+          <button id="prev">&larr; Anterior</button>
+          <button id="next">Siguiente &rarr;</button>
+        </div>
+      </div>
+
     </div>
-   </div>
   </div>
+
   <footer>
-   <strong>
-    MIRADAS.
-   </strong>
-   <span>
-    Archivo visual de aprendizaje autodidacta &middot; Canon EOS Rebel T3i
-   </span>
+    <strong>MIRADAS.</strong>
+
+    <span>
+      Archivo visual de aprendizaje autodidacta &middot;
+      Canon EOS Rebel T3i
+    </span>
   </footer>
+
   <script>
-const cards = [...document.querySelectorAll('.card')];
-const modal = document.querySelector('#modal');
-const img = document.querySelector('#modalImg');
-const title = document.querySelector('#modalTitle');
-const kicker = document.querySelector('#modalKicker');
-const story = document.querySelector('#modalStory');
-const count = document.querySelector('#modalCount');
-const thumbs = document.querySelector('#modalThumbs');
-const menuToggle = document.querySelector('#menuToggle');
-const navLinks = document.querySelector('#navLinks');
+    const cards = [...document.querySelectorAll('.card')];
+    const modal = document.querySelector('#modal');
+    const modalImg = document.querySelector('#modalImg');
+    const modalTitle = document.querySelector('#modalTitle');
+    const modalKicker = document.querySelector('#modalKicker');
+    const modalStory = document.querySelector('#modalStory');
+    const modalCount = document.querySelector('#modalCount');
+    const modalThumbs = document.querySelector('#modalThumbs');
+    const menuToggle = document.querySelector('#menuToggle');
+    const navLinks = document.querySelector('#navLinks');
 
-function closeMobileMenu() {
-    navLinks.classList.remove('open');
-    menuToggle.setAttribute('aria-expanded', 'false');
-    menuToggle.innerHTML = '&#9776;';
-}
-
-menuToggle.onclick = () => {
-    const isOpen = navLinks.classList.toggle('open');
-    menuToggle.setAttribute('aria-expanded', String(isOpen));
-    menuToggle.innerHTML = isOpen ? '&#10005;' : '&#9776;';
-};
-
-document.addEventListener('click', (e) => {
-    const clickedInsideNav = e.target.closest('.nav');
-
-    if (!clickedInsideNav && navLinks.classList.contains('open')) {
-        closeMobileMenu();
+    function closeMobileMenu() {
+      navLinks.classList.remove('open');
+      menuToggle.setAttribute('aria-expanded', 'false');
+      menuToggle.innerHTML = '&#9776;';
     }
-});
 
-// Imágenes EXTRA de cada galería. La primera de cada lista es la misma
-// que se ve en la miniatura de la sección "Galerías"; las siguientes
-// solo aparecen al abrir esa tarjeta en el modal.
-const galleryImages = [
-    [ // 01 — Primeros pasos
+    menuToggle.addEventListener('click', () => {
+      const isOpen = navLinks.classList.toggle('open');
+
+      menuToggle.setAttribute('aria-expanded', String(isOpen));
+      menuToggle.innerHTML = isOpen ? '&#10005;' : '&#9776;';
+    });
+
+    document.addEventListener('click', (event) => {
+      const clickedInsideNav = event.target.closest('.nav');
+
+      if (!clickedInsideNav && navLinks.classList.contains('open')) {
+        closeMobileMenu();
+      }
+    });
+
+    /*
+     * Imágenes de cada galería.
+     * El orden de las imágenes coincide con el orden de
+     * las descripciones dentro de galleryDescriptions.
+     */
+    const galleryImages = [
+
+      [
         'https://scontent-eze1-1.xx.fbcdn.net/v/t39.30808-6/649265372_10239822372153449_7705266467951166800_n.jpg?stp=dst-jpg_tt6&cstp=mx960x640&ctp=s960x640&_nc_cat=109&ccb=1-7&_nc_sid=cf85f3&_nc_ohc=9ffzR8Zyn6cQ7kNvwE2LKsH&_nc_oc=AdqhRJlvCBlG6BTl2YDeiFj334pE0kSvPAnJA7r3glmhgirO05dLoDmJpiuZRcibjn0&_nc_zt=23&_nc_ht=scontent-eze1-1.xx&_nc_gid=TNUcbVujApmzYZGBEKY3Hg&_nc_ss=7b2a8&oh=00_AQJGEvVJ-hZNCKYkniC5ngolbwwJlczmZ-kRYxV91_dW_g&oe=6AAB165D',
         'https://scontent-eze1-2.xx.fbcdn.net/v/t39.30808-6/649167500_10239822372553459_9035957120449844917_n.jpg?stp=dst-jpg_tt6&cstp=mx960x640&ctp=s960x640&_nc_cat=107&ccb=1-7&_nc_sid=cf85f3&_nc_ohc=bAXEzvWayVYQ7kNvwFGDOZW&_nc_oc=Adpe83rkoQhuNZP_BrkW0eNRizeSGNS9OHW6m2iH3_ae-CZwR2DEBQo97AxqFjaPILw&_nc_zt=23&_nc_ht=scontent-eze1-2.xx&_nc_gid=EDaC3HZPit0t1ciV8n448A&_nc_ss=7b2a8&oh=00_AQIq5Aabul11E49uRaFjRhyUDLH7N6VVJosysMyi-wunWQ&oe=6AAB4998',
         'https://images.unsplash.com/photo-1495707902641-75cac588d2e9?auto=format&fit=crop&w=1200&q=85',
         'https://images.unsplash.com/photo-1554048612-b6a482bc67e5?auto=format&fit=crop&w=1200&q=85',
         'https://images.unsplash.com/photo-1554048612-b6a482bc67e5?auto=format&fit=crop&w=1200&q=85',
         'https://images.unsplash.com/photo-1554048612-b6a482bc67e5?auto=format&fit=crop&w=1200&q=85'
-    ],
-    [ // 02 — Luz encontrada
+      ],
+
+      [
         'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1200&q=85',
         'https://images.unsplash.com/photo-1470770903676-69b98201ea1c?auto=format&fit=crop&w=1200&q=85',
         'https://images.unsplash.com/photo-1444927714506-8492d94b5ba0?auto=format&fit=crop&w=1200&q=85',
         'https://images.unsplash.com/photo-1465146344425-f00d5f5c8f07?auto=format&fit=crop&w=1200&q=85'
-    ],
-    [ // 03 — Ritmo urbano
+      ],
+
+      [
         'https://images.unsplash.com/photo-1519501025264-65ba15a82390?auto=format&fit=crop&w=1200&q=85',
         'https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?auto=format&fit=crop&w=1200&q=85',
         'https://images.unsplash.com/photo-1449824913935-59a10b8d2000?auto=format&fit=crop&w=1200&q=85',
         'https://images.unsplash.com/photo-1470252649378-9c29740c9fa8?auto=format&fit=crop&w=1200&q=85'
-    ],
-    [ // 04 — Detalles
+      ],
+
+      [
         'https://images.unsplash.com/photo-1497250681960-ef046c08a56e?auto=format&fit=crop&w=1200&q=85',
         'https://images.unsplash.com/photo-1465101162946-4377e57745c3?auto=format&fit=crop&w=1200&q=85',
         'https://images.unsplash.com/photo-1518837695005-2083093ee35b?auto=format&fit=crop&w=1200&q=85',
         'https://images.unsplash.com/photo-1524492412937-b28074a5d7da?auto=format&fit=crop&w=1200&q=85'
-    ],
-    [ // 05 — El instante
+      ],
+
+      [
         'https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=1200&q=85',
         'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=1200&q=85',
         'https://images.unsplash.com/photo-1531123897727-8f129e1688ce?auto=format&fit=crop&w=1200&q=85',
         'https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?auto=format&fit=crop&w=1200&q=85'
-    ],
-    [ // 06 — Mejor obra
+      ],
+
+      [
         'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1200&q=85',
         'https://images.unsplash.com/photo-1471943311424-646960669fbc?auto=format&fit=crop&w=1200&q=85',
         'https://images.unsplash.com/photo-1441716844725-09cedc13a4e7?auto=format&fit=crop&w=1200&q=85',
         'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=1200&q=85'
-    ]
-];
+      ]
 
-let current = 0; // qué tarjeta/galería está abierta
-let i = 0; // índice de imagen dentro de esa galería
+    ];
 
-// Abre el modal en la tarjeta "n", siempre empezando por su primera imagen.
-function openGallery(n) {
-    current = (n + cards.length) % cards.length;
-    i = 0;
-    renderModal();
-    modal.classList.add('open');
-}
+    /*
+     * Una descripción diferente para cada fotografía.
+     * El índice de cada descripción coincide con el índice
+     * de la imagen correspondiente.
+     */
+    const galleryDescriptions = [
 
-// Cambia de imagen DENTRO de la galería que está abierta (no cambia de tarjeta).
-function changeImage(step) {
-    const imgs = galleryImages[current];
-    i = (i + step + imgs.length) % imgs.length;
-    renderModal();
-}
+      [
+        'La emoción de presionar el disparador y comenzar a observar la luz.',
+        'Una primera exploración de la cámara y de las posibilidades que ofrece.',
+        'Aprender a encontrar belleza en una escena cotidiana.',
+        'La paciencia de esperar el momento adecuado antes de tomar la fotografía.',
+        'Cada intento revela algo nuevo sobre la composición.',
+        'El comienzo de una mirada que todavía estaba por descubrirse.'
+      ],
 
-// Pinta el contenido actual del modal: imagen, textos, contador y miniaturas.
-function renderModal() {
-    const c = cards[current];
-    const imgs = galleryImages[current];
+      [
+        'La luz natural transforma una escena sencilla en una imagen especial.',
+        'Las sombras ayudan a crear profundidad y carácter.',
+        'Un paisaje observado desde una perspectiva diferente.',
+        'Experimentar con la exposición permite descubrir nuevas atmósferas.'
+      ],
 
-    img.src = imgs[i];
-    title.textContent = c.dataset.currentTitle || c.dataset.title;
-    kicker.textContent = c.dataset.currentKicker || c.dataset.kicker;
-    story.innerHTML = c.dataset.currentStory || c.dataset.story;
-    count.textContent = `${i + 1} / ${imgs.length}`;
+      [
+        'La ciudad se convierte en un escenario lleno de líneas, movimiento y contrastes.',
+        'Los edificios muestran otra forma de ritmo visual.',
+        'Cada calle ofrece una composición distinta.',
+        'La luz urbana cambia constantemente y obliga a observar con atención.'
+      ],
 
-    thumbs.innerHTML = '';
-    imgs.forEach((src, index) => {
-        const b = document.createElement('button');
-        b.className = index === i ? 'active' : '';
-        b.innerHTML = `<img src="${src}"/>`;
-        b.onclick = () => {
-            i = index;
-            renderModal();
-        };
-        thumbs.appendChild(b);
+      [
+        'Una textura, una hoja y la belleza de lo que suele pasar desapercibido.',
+        'Los pequeños detalles también pueden contar una historia.',
+        'La naturaleza revela formas y colores cuando se observa de cerca.',
+        'Encontrar belleza en lo cotidiano es otra manera de aprender a mirar.'
+      ],
+
+      [
+        'Cada retrato es una conversación silenciosa entre quien mira y quien decide quedarse.',
+        'Una expresión espontánea puede decir más que una pose preparada.',
+        'El instante preciso aparece cuando la cámara y la emoción coinciden.',
+        'Retratar también significa aprender a reconocer la esencia de una persona.'
+      ],
+
+      [
+        'La técnica deja espacio para lo esencial: reconocer una imagen cuando finalmente aparece.',
+        'Una composición equilibrada puede convertir un paisaje en una experiencia.',
+        'La fotografía también consiste en detenerse y contemplar.',
+        'Una imagen que reúne aprendizaje, paciencia y sensibilidad.'
+      ]
+
+    ];
+
+    let current = 0;
+    let imageIndex = 0;
+
+    function openGallery(galleryIndex) {
+      current = (galleryIndex + cards.length) % cards.length;
+      imageIndex = 0;
+
+      renderModal();
+      modal.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeGallery() {
+      modal.classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    function changeImage(step) {
+      const images = galleryImages[current];
+
+      imageIndex =
+        (imageIndex + step + images.length) % images.length;
+
+      renderModal();
+    }
+
+    function renderModal() {
+      const card = cards[current];
+      const images = galleryImages[current];
+      const descriptions = galleryDescriptions[current];
+
+      const currentImage = images[imageIndex];
+      const currentDescription = descriptions[imageIndex];
+
+      modalImg.src = currentImage;
+      modalImg.alt =
+        `${card.dataset.title} — fotografía ${imageIndex + 1}`;
+
+      modalTitle.textContent =
+        card.dataset.currentTitle || card.dataset.title;
+
+      modalKicker.textContent =
+        card.dataset.currentKicker || card.dataset.kicker;
+
+      /*
+       * Esta línea hace que cada foto muestre
+       * una descripción diferente.
+       */
+      modalStory.textContent = currentDescription;
+
+      modalCount.textContent =
+        `${imageIndex + 1} / ${images.length}`;
+
+      modalThumbs.innerHTML = '';
+
+      images.forEach((src, index) => {
+        const button = document.createElement('button');
+        const thumbnail = document.createElement('img');
+
+        button.className =
+          index === imageIndex ? 'active' : '';
+
+        button.setAttribute(
+          'aria-label',
+          `Ver fotografía ${index + 1}`
+        );
+
+        thumbnail.src = src;
+        thumbnail.alt =
+          `Miniatura de fotografía ${index + 1}`;
+
+        button.appendChild(thumbnail);
+
+        button.addEventListener('click', () => {
+          imageIndex = index;
+          renderModal();
+        });
+
+        modalThumbs.appendChild(button);
+      });
+    }
+
+    cards.forEach((card, index) => {
+      card.addEventListener('click', () => {
+        openGallery(index);
+      });
     });
-}
 
-cards.forEach((c, n) => {
-    c.onclick = () => openGallery(n);
-});
+    document.querySelector('#next').addEventListener('click', () => {
+      changeImage(1);
+    });
 
-document.querySelector('#next').onclick = () => changeImage(1);
-document.querySelector('#prev').onclick = () => changeImage(-1);
-document.querySelector('#close').onclick = () => modal.classList.remove('open');
+    document.querySelector('#prev').addEventListener('click', () => {
+      changeImage(-1);
+    });
 
-modal.onclick = (e) => {
-    if (e.target === modal) {
-        modal.classList.remove('open');
-    }
-};
+    document.querySelector('#close').addEventListener('click', () => {
+      closeGallery();
+    });
 
-document.onkeydown = (e) => {
-    if (e.key === 'Escape') {
-        modal.classList.remove('open');
+    modal.addEventListener('click', (event) => {
+      if (event.target === modal) {
+        closeGallery();
+      }
+    });
+
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape') {
+        closeGallery();
         closeMobileMenu();
-    }
+      }
 
-    if (!modal.classList.contains('open')) {
+      if (!modal.classList.contains('open')) {
         return;
-    }
+      }
 
-    if (e.key === 'ArrowRight') {
+      if (event.key === 'ArrowRight') {
         changeImage(1);
-    }
+      }
 
-    if (e.key === 'ArrowLeft') {
+      if (event.key === 'ArrowLeft') {
         changeImage(-1);
-    }
-};
+      }
+    });
 
-// Navegación suave para los enlaces internos del menú.
-document.querySelectorAll('.nav a[href^="#"]').forEach((link) => {
-    link.addEventListener('click', (event) => {
-        const target = document.querySelector(link.getAttribute('href'));
+    document
+      .querySelectorAll('.nav a[href^="#"]')
+      .forEach((link) => {
+        link.addEventListener('click', (event) => {
+          const target = document.querySelector(
+            link.getAttribute('href')
+          );
 
-        if (!target) {
+          if (!target) {
             return;
-        }
+          }
 
-        event.preventDefault();
-        closeMobileMenu();
-        target.scrollIntoView({
+          event.preventDefault();
+          closeMobileMenu();
+
+          target.scrollIntoView({
             behavior: 'smooth',
             block: 'start'
+          });
         });
-    });
-});
+      });
 
-// Entrada suave de las secciones al desplazarse por la página.
-const revealItems = document.querySelectorAll('.hero, .section');
-const revealObserver = new IntersectionObserver((entries, observer) => {
-    entries.forEach((entry) => {
-        if (entry.isIntersecting) {
+    const revealItems =
+      document.querySelectorAll('.hero, .section');
+
+    const revealObserver = new IntersectionObserver(
+      (entries, observer) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
             entry.target.classList.add('is-visible');
             observer.unobserve(entry.target);
-        }
-    });
-}, {
-    threshold: 0.12
-});
+          }
+        });
+      },
+      {
+        threshold: 0.12
+      }
+    );
 
-revealItems.forEach((item) => revealObserver.observe(item));
-</script>
- </body>
+    revealItems.forEach((item) => {
+      revealObserver.observe(item);
+    });
+  </script>
+
+</body>
 </html>
